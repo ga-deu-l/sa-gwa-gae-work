@@ -1,0 +1,1180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E8493F">
+<title>사과개 서식지</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8D%8E%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#FFF8F0; --card:#FFFFFF; --ink:#3B2A26; --sub:#8C7A74; --line:#F0E3D8;
+  --main:#E8493F; --main-deep:#C93A31; --main-soft:#FDE9E5; --leaf:#5BAA6A;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  font-size:15px;line-height:1.55}
+body{max-width:480px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit}
+svg{display:block}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:var(--main);color:#fff;
+  display:flex;align-items:center;gap:8px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top))}
+.top .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;letter-spacing:-.5px}
+.top .grow{flex:1}
+.top .back{width:32px;height:32px;display:grid;place-items:center;border-radius:50%}
+.top .back:active{background:rgba(255,255,255,.18)}
+.top .title{font-weight:700;font-size:16px}
+
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 14px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:7px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--sub)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* notice */
+.notice{margin:10px 14px 0;padding:10px 12px;background:var(--main-soft);border-radius:12px;font-size:13px;color:var(--main-deep);display:flex;gap:8px;align-items:center}
+
+/* list */
+.list{padding:10px 14px}
+.item{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
+.item:active{background:#fffaf6}
+.item .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--main-deep);background:var(--main-soft);padding:2px 8px;border-radius:999px;margin-bottom:6px}
+.item .tt{font-weight:700;font-size:16px;line-height:1.4;display:flex;gap:6px;align-items:baseline}
+.item .tt .cm{color:var(--main);font-size:13px;font-weight:800;flex:none}
+.item .pv{margin-top:4px;color:var(--sub);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{margin-top:10px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--sub)}
+.meta .nick{font-weight:600;color:var(--ink)}
+.meta .st{display:flex;align-items:center;gap:3px}
+.meta .grow{flex:1}
+.empty{text-align:center;color:var(--sub);padding:56px 0}
+
+/* post */
+.post{padding:16px 14px 6px}
+.post .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--main-deep);background:var(--main-soft);padding:2px 8px;border-radius:999px}
+.post h2{font-size:20px;line-height:1.4;margin:8px 0 10px;letter-spacing:-.3px}
+.post .info{display:flex;gap:10px;align-items:center;font-size:12.5px;color:var(--sub);padding-bottom:14px;border-bottom:1px solid var(--line)}
+.post .info .nick{color:var(--ink);font-weight:700}
+.post .body{padding:16px 0;font-size:16px;line-height:1.75;word-break:break-word}
+.actions{display:flex;justify-content:center;gap:10px;padding:6px 0 18px}
+.like{display:flex;align-items:center;gap:6px;padding:10px 20px;border-radius:999px;border:1.5px solid #8FC76B;color:#6DB33F;font-weight:700;transition:background .2s,color .2s,border-color .2s}
+.like.on{background:var(--main);border-color:var(--main);color:#fff}
+.nav button{position:relative}
+.nav .badge{position:absolute;top:3px;left:calc(50% + 4px);min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--main);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center}
+
+/* comments */
+.cmhead{padding:14px;font-weight:800;border-top:8px solid var(--line);background:var(--bg)}
+.cmhead span{color:var(--main)}
+.cm-item{padding:12px 14px;border-bottom:1px solid var(--line);background:var(--card)}
+.cm-item.re{padding-left:34px;background:#fffbf7;position:relative}
+.cm-item.re::before{content:"↳";position:absolute;left:16px;top:12px;color:var(--sub)}
+.cm-item .h{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--sub)}
+.cm-item .h b{color:var(--ink)}
+.cm-item .op{font-size:11px;font-weight:800;color:#fff;background:var(--leaf);padding:1px 6px;border-radius:999px}
+.cm-item .h .grow{flex:1}
+.cm-item .t{margin-top:4px;word-break:break-word}
+.cm-item .lk{font-size:12.5px;color:var(--sub);display:flex;align-items:center;gap:3px}
+
+/* comment write (dropdown) */
+.cw{padding:12px 14px;background:var(--card);border-bottom:1px solid var(--line)}
+.cw-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-weight:700;color:var(--sub)}
+.cw-toggle.on{border-color:var(--main);color:var(--main)}
+.cw-arrow{transition:transform .2s}
+.cw-toggle.on .cw-arrow{transform:rotate(180deg)}
+.cw-panel{margin-top:10px;animation:drop .2s ease}
+@keyframes drop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.cw-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.cw-opt{text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;display:flex;flex-direction:column;gap:2px}
+.cw-opt b{font-size:12px;color:var(--main-deep)}
+.cw-opt span{font-size:14px;color:var(--ink)}
+.cw-opt.on{border-color:var(--main);background:var(--main-soft)}
+.cw textarea{width:100%;min-height:72px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:none;resize:vertical;line-height:1.6}
+.cw textarea:focus{border-color:var(--main)}
+.cw-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.cw-me{font-size:12.5px;color:var(--sub)}
+.cw-foot .btn{height:38px}
+.cw-opt .ar{font-size:11px;color:var(--sub);margin-left:2px}
+.cw-tones{margin:-2px 0 2px 10px;padding-left:10px;border-left:2px solid var(--main-soft);display:flex;flex-direction:column;gap:6px;animation:drop .2s ease}
+.cw-tone{text-align:left;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;display:flex;gap:8px;align-items:flex-start}
+.cw-tone em{flex:none;font-style:normal;font-size:11px;font-weight:800;color:#fff;background:var(--sub);padding:2px 7px;border-radius:999px;margin-top:2px}
+.cw-tone span{font-size:14px;line-height:1.5}
+.cw-tone.on{border-color:var(--main);background:var(--main-soft)}
+.cw-tone.on em{background:var(--main)}
+.cw-note{font-size:12px;color:var(--sub);margin-top:6px}
+.btn:disabled{opacity:.4;cursor:default}
+.cw-reset{width:100%;padding:10px;border-radius:12px;border:1px dashed var(--sub);color:var(--sub);font-size:13.5px;font-weight:600}
+.cm-item .me-b{font-size:11px;font-weight:800;color:#fff;background:var(--main);padding:1px 6px;border-radius:999px}
+.cm-item.fresh{animation:drop .3s ease}
+.typing{padding:12px 14px 12px 34px;font-size:13px;color:var(--sub);background:#fffbf7;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:2px}
+.typing b{color:var(--ink)}
+.dots{display:inline-flex;gap:3px;margin-left:6px}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--sub);animation:blink 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+.btn{padding:0 18px;border-radius:999px;background:var(--main);color:#fff;font-weight:700}
+.btn:active{background:var(--main-deep)}
+
+/* write */
+.form{padding:14px}
+.form label{display:block;font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 6px}
+.form select,.form input,.form textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:none}
+.form textarea{min-height:240px;resize:vertical;line-height:1.7}
+.form select:focus,.form input:focus,.form textarea:focus{border-color:var(--main)}
+.form .who{font-size:13px;color:var(--sub);margin-top:8px}
+.form .submit{width:100%;margin-top:18px;height:50px;font-size:16px}
+
+/* bottom nav */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;z-index:30;
+  display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom)}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 7px;font-size:11px;font-weight:600;color:var(--sub)}
+.nav button.on{color:var(--main)}
+.nav .write{color:#fff}
+.nav .write i{width:38px;height:38px;border-radius:50%;background:var(--main);display:grid;place-items:center;margin-top:-14px;box-shadow:0 4px 10px rgba(232,73,63,.35)}
+.nav .write span{color:var(--sub)}
+
+/* notifications */
+.top .readall{color:#fff;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.2)}
+.noti-list{padding-top:4px}
+.noti-item{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:14px;border-bottom:1px solid var(--line);background:var(--card)}
+.noti-item.new{background:var(--main-soft)}
+.noti-item:active{filter:brightness(.97)}
+.noti-ic{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);font-size:17px}
+.noti-tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.noti-tx .m{font-size:14.5px;line-height:1.45}
+.noti-tx .p{font-size:13px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.noti-tx .tm{font-size:12px;color:var(--sub);margin-top:4px}
+.noti-item .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--main);margin-top:6px}
+
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;white-space:nowrap}
+.toast.show{opacity:1}
+.top .logo .emo{font-size:24px;line-height:1}
+/* LIVE */
+.live-b{flex:none;align-self:center;font-size:10.5px;font-weight:800;color:#fff;background:#FF3B30;padding:1px 6px;border-radius:4px;letter-spacing:.5px}
+.live-b.end{background:var(--sub)}
+.live-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#2B1F1C;color:#fff;font-size:13px;font-weight:700}
+.live-bar.end{background:#8C7A74}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#FF4B3E;animation:blink 1.2s infinite}
+.live-bar.end .live-dot{background:#eee;animation:none}
+.cm-item.upd{background:#FFF4F2;border-left:3px solid var(--main)}
+.cm-item.upd .t{font-size:15.5px}
+.live-end{text-align:center;color:var(--sub);font-size:12.5px;padding:14px;background:var(--card);border-bottom:1px solid var(--line)}
+.cw.live-cw{position:fixed;left:50%;transform:translateX(-50%);width:100%;max-width:480px;bottom:calc(56px + env(safe-area-inset-bottom));z-index:25;box-shadow:0 -6px 14px rgba(59,42,38,.08);border-top:1px solid var(--line)}
+.cw.live-cw .cw-opts{max-height:40vh;overflow:auto;overscroll-behavior:contain}
+/* LIVE 본문 */
+.post.live{padding-bottom:110px}
+.post.live h2{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.post.live h2 .live-b{font-size:11px;padding:2px 7px;display:inline-flex;align-items:center;gap:4px}
+.post.live h2 .live-b::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff;animation:blink 1.2s infinite}
+.post.live h2 .live-b.end::before{animation:none;opacity:.7}
+.lv{padding:6px 0 0;border-top:1px solid var(--line)}
+.lv p{margin:0 0 12px;word-break:break-word}
+.lv .lv-a{font-size:16px;line-height:1.75;color:var(--ink)}
+.lv .lv-c{font-size:14.5px;line-height:1.6;color:#7A6862;padding-left:10px;border-left:2px solid var(--line)}
+.lv .lv-c b{font-size:13px;font-weight:700;color:#5A4843;margin-right:6px}
+.lv .lv-c.me{color:var(--main);border-left-color:var(--main)}
+.lv .lv-c.me b{color:var(--main)}
+.lv .fresh{animation:drop .3s ease}
+.lv .lv-typing{font-size:13px;color:var(--sub);display:flex;align-items:center}
+.lv .lv-end{text-align:center;color:var(--sub);font-size:12.5px;margin-top:16px}
+.post .body,.lv .lv-a{line-height:var(--lh,1.75)}
+.lv p{margin-bottom:var(--gap,12px)}
+.lv-gap{height:calc(var(--gap,12px) + 4px)}
+.lv-re{display:inline-block;font-size:12px;font-weight:600;color:var(--sub);border:1px dashed #CDBFB9;border-radius:999px;padding:3px 10px;margin:-4px 0 12px 12px;background:#fff}
+.lv-pick{margin:4px 0 14px;padding:12px;border:1.5px solid var(--main);border-radius:14px;background:#fff;animation:drop .25s ease}
+.lv-pick-h{font-weight:800;font-size:14px;margin-bottom:10px;color:var(--main-deep)}
+.lv-pick-h small{font-weight:500;color:var(--sub);margin-left:4px}
+.lv-pick textarea{width:100%;min-height:72px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:none;resize:vertical;line-height:1.6;margin-bottom:4px}
+.fs-sm{font-size:.85em}.fs-lg{font-size:1.25em}.fs-xl{font-size:1.6em;line-height:1.3}
+.lv .lv-c .col{color:#B3A49E;margin:0 5px 0 1px}
+.lv .lv-c.me .col{color:var(--main)}
+/* write by choice */
+.w-guide{font-weight:800;font-size:16px;margin:4px 0 10px}
+.cw-tone span b{display:block;font-size:14px;color:var(--ink)}
+.cw-tone span small{display:block;color:var(--sub);font-size:12.5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+.w-prev{margin-top:6px;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line);animation:drop .2s ease}
+.w-prev .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--main-deep);background:var(--main-soft);padding:2px 8px;border-radius:999px}
+.w-prev h3{font-size:17px;margin:8px 0 6px;line-height:1.4}
+.w-prev div{font-size:14.5px;line-height:1.7;color:var(--ink)}
+.form .cw-note{margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- ============ 데이터 영역: 편집기에서 저장하면 이 부분이 자동으로 채워져요 ============ -->
+<script>
+const DATA = /*DATA_START*/{
+  "site": {
+    "name": "사과개 서식지",
+    "notice": "📢 건전한 인터넷 문화를 지키도록 해요"
+  },
+  "me": "익명의 사과 7",
+  "allowFree": true,
+  "boards": [
+    {
+      "id": "chat",
+      "name": "떠들개"
+    },
+    {
+      "id": "ask",
+      "name": "물어보개"
+    },
+    {
+      "id": "worry",
+      "name": "고민되개"
+    },
+    {
+      "id": "news",
+      "name": "알려주개"
+    }
+  ],
+  "tones": [
+    {
+      "id": "t1",
+      "name": "1번"
+    },
+    {
+      "id": "t2",
+      "name": "2번"
+    }
+  ],
+  "notifications": [
+    {
+      "type": "comment",
+      "postId": 3,
+      "time": "30분 전",
+      "read": false,
+      "text": "익명의 사과 6님이 댓글을 달았어요: 응원할게!"
+    },
+    {
+      "type": "like",
+      "postId": 1,
+      "time": "1시간 전",
+      "read": false,
+      "count": 10
+    },
+    {
+      "type": "reply",
+      "postId": 2,
+      "time": "어제",
+      "read": true,
+      "text": "익명의 사과 2님이 답글을 달았어요"
+    },
+    {
+      "type": "notice",
+      "postId": 4,
+      "time": "3일 전",
+      "read": true,
+      "text": "새 공지가 올라왔어요"
+    }
+  ],
+  "posts": [
+    {
+      "id": 5,
+      "board": "chat",
+      "nick": "보지탐험대",
+      "time": "3분 전",
+      "views": 888,
+      "likes": 1258,
+      "title": "[LIVE]소문의 딸감 개걸레ㄴ 따먹기 생중계",
+      "body": "(동영상. \n“야 이 유튜브 동정 새끼들아! 보지탐험대 형님이 그 소문 무성한 원룸촌 딸감 여사 찾으러 간다. 위로는 젖 아래로는 씹물 좍좍 뿜어낸단다 이미 인터넷에서는 존나 유명하지? 차마 무서워서 못 찾아가는 동정 새끼들을 위해 이 형님이…, 어, 씨발, 찾았다!”\n딸감 여사는 살짝 발그레한 얼굴로 건물 앞을 청소하고 있다. \n아침 햇살 아래 하얀 피부와 살짝 내리깐 눈은 청초하고 고상하게 보였지만, 딱 달라 붙는 원피스는 여사의 너무 커져 아래로 살짝 쳐진 거대하고 무거운 젖탱이와 그 아래 잡고 박아대기 좋게 쏙 들어간 허리를 노골적으로 강조하고 있다. \n심지어 가슴을 어디까지 깐 건지, 여사가 조금 빠르게 걷기만 해도 가슴 부분 천이 확 아래로 까여 젖꼭지가 바로 드러날 것 같다.\n“누가 봐도 딸감 여사가 맞네. 야 잠깐 기다려라.”\n남자가 딸감 여사에게 다가간다. 딸감 여사가 인사하기도 전에 남자가 딸감 여사의 손목을 잡고 억지로 원룸 건물 입구로 들어간다.\n“어머!”\n“어머는 무슨 씨발 처녀인 척하네 야 씨발 보지 까!”\n“으응…♡”\n원룸 건물 유리문이 닫히고 남자와 딸감 여사는 1층 계단 앞에 서 있다. \n남자가 큰 소리로 윽박지르자 딸감 여사가 기대하는 얼굴로 계단에 앉아 바로 다리 벌린다. \n털 한 올도 없는 빽보지가 드러난다. \n이미 보지는 젖다 못해 축축해서 애액이 줄줄 흘러 계단 밑에 웅덩이를 만들고 있다. \n딸감 여사가 자기 손을 아래로 내려 보짓살을 옆으로 벌리자, 아직 정액이 묻은 구멍이 보인다. 흥분으로 짙은 분홍색으로 익은 보지 구멍이 빠끄음♡ 빠끄음♡ 움직이며 안의 쫄깃한 근육이 꿀렁댈 때마다 배 깊이 받았던 정액이 후두둑후두둑 떨어진다.\n“강간해 줄거야?♡”\n“뭐, 뭐야 이 씨발ㄴ은?”",
+      "comments": [],
+      "live": {
+        "on": true,
+        "startDelay": 800,
+        "endMark": true,
+        "lines": [
+          {
+            "nick": "익명의 사과 11",
+            "text": "[color=#2F80ED]@@100,000원 후원 감사합니다!@@[/color] 야 씨발 보탐대야 쫄지 말고 가라!ㅋㅋㅋ",
+            "delay": 1000,
+            "type": "comment"
+          },
+          {
+            "nick": "익명의 사과  13",
+            "text": "[color=#2F80ED]@@500,000원 후원 감사합니다!@@[/color] 저런 변기ㄴ은 보지 써주면 오히려 좋아한다 바로 후장 박아라",
+            "delay": 1000,
+            "type": "comment"
+          },
+          {
+            "nick": "익명의 사과 22",
+            "text": "[color=#2F80ED]@@1,000원 후원 감사합니다!@@[/color] 젖 보여주시면 안 될까요ㅎㅎ",
+            "delay": 1000,
+            "type": "comment"
+          },
+          {
+            "nick": "보지탐험대",
+            "text": "“씨발 간다!”\n“흐그아아악!♡♡♡”\n남자가 바로 바지 내리고 자지를 눈앞의 걸레 구멍에 처박는다. \n딸감 여사는 자지를 박아주자마자 다리를 벌려 남자의 허리를 끌어안고 큰 소리를 낸다. 남자는 헉헉대며 허리를 움직이고, 딸감 여사는 앙앙  즐긴다. \n그러나 점점 남자의 허리 놀림이 느려지는데…?",
+            "delay": 1000,
+            "type": "text"
+          },
+          {
+            "type": "pick",
+            "delay": 800,
+            "options": [
+              {
+                "label": "1번 댓글",
+                "summary": "영상 촬영 각도 요청",
+                "tones": {
+                  "t1": "보지 더 잘 보이게 못 찍음? 존나 강간 영상 처음 찍나 씹; 아다 새끼가 찍기엔 저 ㄴ이 너무 개걸레ㄴ이네 아 존나 아깝네 영상 똑바로 찍으라고",
+                  "t2": "흠흠ㅠ 보지도 잘 안 보이고 그렇다고 뒷구멍이 잘 보이는 것도 아니고ㅠ 진짜 이도저도 아닌 각도라 뭐 꼴리다가 말고... 에휴.... "
+                },
+                "replies": []
+              },
+              {
+                "label": "2번 댓글",
+                "summary": "",
+                "tones": {},
+                "replies": []
+              }
+            ]
+          },
+          {
+            "nick": "익명의 사과 9",
+            "text": "보탐대 이 병신 새끼 혹시 아다 아님?",
+            "delay": 1000,
+            "type": "comment"
+          },
+          {
+            "nick": "익명의 사과 11",
+            "text": "↳이게 맞는 듯 병신 허리 흔드는 거 봐라 존나 못 하네ㅋㅋ",
+            "delay": 1000,
+            "type": "comment"
+          },
+          {
+            "nick": "익명의 사과 69",
+            "text": "ㅉㅉ 쟤 트라우마 생길 듯 저 젖소ㄴ 얼굴 봐라 존나 어리둥절해하잖아 못 느껴서ㅋㅋㅋㅋㅋ",
+            "delay": 1000,
+            "likes": 0,
+            "type": "comment"
+          },
+          {
+            "type": "text",
+            "nick": "보지탐험대",
+            "text": "딸감 여사는 다정하게 자기를 강간하는 남자의 뺨을 쓰다듬는다.\n“처음이니?”\n“흐억, 흐그윽, 다, 닥쳐.”\n“그러면 아줌마가 가르쳐 줄게…♡ 잘 보고 배워서 아줌마 제대로 강간해 주기야♡”\n딸감 여사가 바로 남자를 계단 위에 앉힌다. \n딸감 여사는 남자의 위에 올라타 자기 원피스에서 직접 빨통 꺼내준다. \n원피스 가슴 천이 딸감 여사의 거대한 빨통 아래를 꽉 조이고 있어, 살이 많아 물컹물컹 말랑말랑 보드라워 보이는 젖탱이는 당장 어디 발사될 것처럼 탱글탱글 탄력 있어 보인다.\n 딸감 여사가 몸을 위아래로 살짝 흔들자 하얗고 커다란 젖이 푸룽♡ 푸루룽♡ 들썩들썩 츄우우우…♡ 흔들리면서 아기 맘마를 흘리기 시작한다.",
+            "delay": 1000
+          },
+          {
+            "type": "comment",
+            "nick": "익명의 사과 117",
+            "text": "씨발 젖 나온다",
+            "delay": 1000,
+            "likes": 0
+          },
+          {
+            "type": "pick",
+            "delay": 800,
+            "options": [
+              {
+                "label": "1번 댓글",
+                "summary": "사진 요청하기",
+                "tones": {
+                  "t1": "영상도 영상인데 사진으로도 꼭 개걸레ㄴ 인증샷 찍어놔라 영상 존나 못 찍어서 얼굴 잘 안 보이고다 흔들리니까 언제 어디서든 알아볼 수 있게 사진으로 꼭 찍어놔라 씨발롬아",
+                  "t2": "영상은 한 번 보기 시간 오래 걸리니까 꼭 퀵 딸감용 사진도 부탁함ㅎ "
+                },
+                "replies": []
+              },
+              {
+                "label": "2번 댓글",
+                "summary": "",
+                "tones": {},
+                "replies": []
+              }
+            ]
+          },
+          {
+            "type": "comment",
+            "nick": "익명의 사과 19",
+            "text": "짜지도 않았는데 젖 혼자 질질 흘리네ㅋㅋㅋ",
+            "delay": 1000,
+            "likes": 0
+          },
+          {
+            "type": "comment",
+            "nick": "익명의 사과 181",
+            "text": "가슴 존나 말랑한 거 봐라 젖골에 문지르면 빨려 들어가겠다",
+            "delay": 1000,
+            "likes": 0
+          },
+          {
+            "type": "comment",
+            "nick": "익명의 사과 38",
+            "text": "[color=#2F80ED]@@1,000,000원 후원 감사합니다!@@[/color] 보탐대 병신아 카메라나 제대로 들어라ㅋㅋㅋ",
+            "delay": 1000,
+            "likes": 0
+          },
+          {
+            "type": "text",
+            "nick": "보지탐험대",
+            "text": "“아줌마는 젖이 나오니까♡ 젖 주물러 봐♡ \n아줌마가 우리 아다 강간범 힘내라고 맘마 열심히 쭈악쭈악 뿜어내서 먹여줄게♡ \n자, 자지 바짝 세우고♡ \n그래그래, 우리 아다 강간범은 자지를 딱딱하게 세울 줄 아니까 나중에 제대로 훌륭한 강간범 될 수 있어♡ \n자, 자, 자♡ \n아줌마가 아다 강간범 역강간 할게에…♡”\n딸감 여사가 굵기도 길이도 훌륭하지만 사용감이 없는 분홍색 발기 자지 위에 앉아 보지로 자지를 꿀떡꿀떡 삼킨다. \n딸감 여사는 황홀한 얼굴로 남자의 어깨를 잡고 몸을 뒤로 젖힌 채 할딱할딱 숨 넘어가는 소리를 낸다. \n딸감 여사의 몸이 앞으로 내밀어져, 잇자국이 남은 유륜이 흥분으로 진해지면서 젖 수도꼭지에서 아기 맘마가 촤아아악-! 츠아아악-! 힘차게 뿜어져 나와 카메라에 다 튄다. \n화면에 모유가 방울방울 맺힌다.\n“아줌마는♡ 구멍이라서♡ \n아줌마는 그냥 구멍이고 공용육변기고 개씹꽁허벌보지니까♡ \n아줌마로 강간 연습하고, 나중에 다른 여자 강간할 때면♡ \n네 강하고 늠름한 자지로 강간 당한 여자애 바로 암컷으로 만드는 거야♡ \n할 수 있지?♡”\n“헉헉헉헉! 보지! 보지! 씨발! 이게 보지!”\n“아아아앙!♡ 허리도 흔들 줄 알고 대견해…♡”\n남자가 딸감 여사의 슴골에 고개 파묻고 짐승처럼 헐떡인다. 딸감 여사는 여유로운 얼굴로 남자의 머리를 쓰다듬어 준다.\n“크르응그악으악! 싼다싼다싼다!”\n“흐아아아앙…♡ 아다 강간범 정액 들어와…♡”\n괴성을 지르며 남자가 사정하고, 딸감 여사는 그런 남자를 귀여워한다. \n딸감 여사가 일어나려 하자 남자가 그런 여사를 계단에 엎드리게 한다. \n딸감 여사는 잠시 놀랐지만 다시 여유롭고 음란한 얼굴로 혀를 날름거리며 보지 벌려준다. \n방금 남자가 싼 정액은 과연 아다 정액답게 덩어리져 있어, 질벽이 츄으읍…♡ 쭙쭙쭙츗!♡ 정액을 빨아먹었다가 뱉을 때마다 바닥에 턱턱! 큰 소리를 내며 떨어진다. \n남자가 딸감 여사의 살집 좋은 풍만한 엉덩이를 두 손으로 주무르며 엉덩이골에 자지를 미친 듯이 문지른다. \n정액과 보지즙으로 더러운 자지가 금세 발기한다.\n“씨발! 걸레보지씨발ㄴ 주제에 감히 자지님을 우습게 봐?!”\n“…흐어억! 으그아가아악! 악! 거기, 거기 예민, 으고으오옥?! 악가아으악악! 뒷구멍 강간당하고 있어어어!♡♡♡”\n“강간해 달라며 씨발ㄴ아!”",
+            "delay": 1000,
+            "likes": 0
+          },
+          {
+            "type": "comment",
+            "nick": "익명의 사과 38",
+            "text": "[color=#2F80ED]@@100,000원 후원 감사합니다!@@[/color] 아다 떼자마자 바로 뒷구멍 박아버리네 보탐대 짜식ㅋㅋㅋㅋ",
+            "delay": 1000,
+            "likes": 0
+          },
+          {
+            "type": "comment",
+            "nick": "익명의 사과 41",
+            "text": "[color=#2F80ED]@@500,000원 후원 감사합니다!@@[/color] 저 ㄴ 지금 좋아하는 거냐 아파하는 거냐? 씹ㅋㅋㅋ 보짓물 쫘아악쫘아악 뿜어내는 소리 존나 커",
+            "delay": 1000,
+            "likes": 0
+          },
+          {
+            "type": "comment",
+            "nick": "익명의 사과 23",
+            "text": "[color=#2F80ED]@@1,000,000원 후원 감사합니다!@@[/color] 아침에 사람 다 지나가는 데 유리문만 대충 닫고 강간하는 거 존나 꼴리네 다음 강간은 더 야외에서 해라",
+            "delay": 1000,
+            "likes": 0
+          },
+          {
+            "type": "text",
+            "nick": "보지탐험대",
+            "text": "남자가 딸감 여사의 허리를 세게 잡는다. \n허리를 잡으니 딸감 여사의 잘록한 곡선이 강조되어 딸감 여사의 빨통과 엉덩이가 얼마나 큰지 보인다. \n자지가 뒷구멍을 작살내고 있는데, 딸감 여사는 행복한 얼굴로 엉덩이를 흔든다. \n“허억! 억, 악악! 으그으윽!♡ 아, 아, 아♡ \n뒷구멍, 흐어으윽!에서 자지 씹물, 흘러, 서♡ 악아악! 악! \n뒷구멍 허벌 되는데 자지 씹물이 개걸레보지즙이랑 섞여서어어♡ \n아그으윽! 아아아악! \n보지 더 병신 되고 있어어어억!♡♡♡”\n“씨발씨발씨발! 싼다! 싼다! 뒷구멍에 싼다!”\n발정난 개새끼처럼 딸감 여사의 하반신에 자기 하반신을 딱 붙이고 허리를 흔들던 남자는 정말 개새끼처럼 아우우 큰 소리를 낸다. \n남자가 딸감 여사의 엉덩이를 주물럭대며 허리를 부르르 떤다. \n남자가 좆을 빼자 뒷구멍에서 울컥울컥♡ 정액이 흘러나온다.)",
+            "delay": 1000
+          }
+        ],
+        "lineSpeed": 900
+      },
+      "choices": []
+    },
+    {
+      "id": 6,
+      "board": "chat",
+      "nick": "익명의 사과 8",
+      "time": "6분 전",
+      "views": 306,
+      "likes": 220,
+      "title": "야 씹 나 존나 재밌는 거 발견함ㅋㅋㅋ ",
+      "body": "이거 링크 타고 가 봐라ㅋㅋ (링크)",
+      "comments": [],
+      "choices": []
+    },
+    {
+      "id": 3,
+      "board": "chat",
+      "nick": "익명의 사과 5",
+      "time": "9분 전",
+      "views": 512,
+      "likes": 44,
+      "title": "딸감 투척함",
+      "body": "(동영상. \n딸감 여사가 알몸으로 엎드려 있다. \n등에는 사인이 가득하다. \n먼저 박던 남자가 좆물을 싸지르고 좆을 툭 뺀다. \n“아아앙!♡ 자지 빠졌어, 아줌마 자지 줘, 흐으그아아악?! 으고오으악악!♡♡♡ 자, 자지가아아아악!♡” \n뒤에서 자지를 박아주니 딸감 여사가 고개를 젖힌다. \n딸감 여사의 몸이 딱딱하게 굳었다 자지를 찔러 주니 몸이 파드득 뛴다. \n“흐에엑♡ 헥헥♡ 자지잇♡” \n쯔퍼억! 척! 철퍽철퍽! 쯔걱걱걱걱! \n보짓물이 잔뜩 고인 자지 받이 구멍을 자지가 헤집을 때마다 딸감 여사는 분수를 싸지르면서 암컷즙을 질질 흐른다. \n남자 한 명이 어떤 종이를 딸감 여사 보지에 대고 문질러 애액 흠뻑 묻힌다. \n“아줌마 ○○이 이번 달 월세 정액 질싸 입금 확인증 여기 둘게요.” \n[월세는 달 35만 원 혹은 정액 질싸 30ml 이상 (아줌마가 분수 200ml 이상 쳤을 때도 유효함)] \n그렇게 적힌 계약서를 남자가 딸감 여사의 이마에 붙인다. \n종이가 보짓물로 흠뻑 젖어 이마에 찰싹! 달라붙는다.)\n\n당장 여사님 못 쓰는 녀석들 잠깐 이거 보고 빼라",
+      "comments": [
+        {
+          "nick": "익명의 사과 8",
+          "time": "1시간 전",
+          "text": "ㄱㅅ",
+          "likes": 12
+        },
+        {
+          "nick": "익명의 사과 13",
+          "time": "1시간 전",
+          "text": "야 왜 젖 안 짰냐? 여사님은 젖 짜는 게 알파이고 오메가인데",
+          "likes": 2,
+          "reply": false
+        },
+        {
+          "nick": "익명의 사과 5",
+          "time": "30분 전",
+          "text": "애들이 월세 내느라 정신 없어서 바빴음",
+          "likes": 1,
+          "reply": true
+        }
+      ],
+      "choices": [
+        {
+          "label": "1번 댓글",
+          "summary": "월세가 비싸다는 이야기",
+          "tones": {
+            "t1": "아니 씹 월세 저렇게 비싸게 처받는 게 말이 되냐? 내 존나 귀한 정액 30ml를 저딴 곳에다 싸기 싫다고 ㅅㅂ",
+            "t2": "엥...?ㅋㅋㅋ 미친년인가 남자 정력 얼마나 빼 먹으려고 저 지랄인거냐? 씹 개헐렁보지에 30 싸는 게 말이 되냐고ㅋㅋㅋㅋ 지 주제를 알아야지ㅋㅋㅋㅋㅋ ",
+            "t3": "그냥 보내보세요! 답장 안 오면 그때 생각해도 늦지 않아요",
+            "t4": "보내. 답 없으면 그게 답이고, 오면 그게 시작이고."
+          },
+          "replies": [
+            {
+              "nick": "익명의 사과 21",
+              "text": "그러면 씨발아 돈으로 내ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "board": "news",
+      "nick": "익명의 사과 3",
+      "time": "12분 전",
+      "views": 130,
+      "likes": 6,
+      "title": "지금 딸감 여사 줄 몇 명 있냐?",
+      "body": "ㅈㄱㄴ",
+      "comments": [
+        {
+          "nick": "익명의 사과 2",
+          "time": "40분 전",
+          "text": "지금 사람 많음 30명 정도",
+          "likes": 5
+        },
+        {
+          "nick": "익명의 사과 3",
+          "time": "방금",
+          "text": "씨발 뭐? 지금 박으면 허벌창이라서 좆 박아도 아무 느낌 안 나겠다",
+          "likes": 7,
+          "reply": true
+        },
+        {
+          "nick": "익명의 사과 9",
+          "time": "방금",
+          "text": "병신 그 헐거운 게 존나 맛도리인데 나는 그래서 일부러 딸감 여사 밤 잠따만 하는데",
+          "likes": 8,
+          "reply": true
+        },
+        {
+          "nick": "익명의 사과 10",
+          "time": "방금",
+          "text": "윗댓 말대로 대기 30명인데 그래서 지금 다같이 갱뱅 하고 있어서 지금 당장 와도 상관 없음 지금 딸감 여사 보지에 2개씩 받으면서 물 빼주고 있어서 대기 줄 빨리빨리 줄어든다",
+          "likes": 0,
+          "reply": false
+        },
+        {
+          "nick": "익명의 사과 11",
+          "time": "방금",
+          "text": "ㄹㅇ? 그럼 나도 가야겠다 ㄱㅅㄱㅅ",
+          "likes": 7,
+          "reply": true
+        }
+      ],
+      "choices": []
+    },
+    {
+      "id": 1,
+      "board": "chat",
+      "nick": "익명의 사과 1",
+      "time": "15분 전",
+      "views": 241,
+      "likes": 18,
+      "title": "택배 기사로 일할 때 가장 뿌듯한 순간은 고객이 택배 받고 웃을 때 아닐까?",
+      "body": "(동영상. 남자의 거친 손이 여자의 작고 동그란 머리를 뒤에서 세게 눌러 고정했다.\n여자는 쪼그려 앉은 채 남자의 허벅지를 꽉 끌어안고 있다. \n남자가 허리를 움직이는 것에 맞추어 여자도 머리를 흔든다. \n츠걱츠걱츄크억쯔브업쩝쩝찔꺼억쯥쯥츄릅츱츱! \n입보지를 자지가 찔러 줄 때마다 여자의 입에서 침이 넘쳐흐른다. \n단정하고 우아하게 생긴 여자의 얼굴은 침과 자지즙으로 엉망이다. \n한참 허리를 흔들던 남자가 여자의 머리를 툭툭 친다. \n그러자 여자가 바로 입에서 자지를 뱉고 몸 일으켜 바닥에 엎드린다. 남자가 여자의 원피스를 걷고 까만 스타킹을 찢어버렸다. \n여자의 레이스 팬티는 흠뻑 젖어 거의 반투명해졌고, 보지와 허벅지 안쪽은 남자가 손을 갖다 댄 것만으로 보지즙이 손에 묻는다. \n여자는 참을 수 없는지 자기 손으로 팬티를 내려 보지를 벌린다. \n좁은 구멍은 겉은 처녀처럼 수줍은 척 분홍색이었지만, 구멍 사이로 슬쩍 보이는 안쪽 질벽은 여자가 헐떡일 때마다 그에 맞춰 안쪽을 쫙 조이고 풀어내기를 반복한다. \n남자가 귀두를 오물대는 가짜 처녀 입구에 걸치더니, 그대로 퍽! 단번에 안으로 박았다. \n“흐아그으으윽아~!♡♡♡ 자지 와써어엇!♡♡♡” \n여자가 경련하면서 엉덩이를 위아래로 흔든다.)\n\n자지 배달받고 기뻐하시는 우리 딸감 여사님 볼 때마다 내가 이 직업을 정말 잘 선택했다는 생각이 든다",
+      "comments": [],
+      "choices": [
+        {
+          "label": "1번 댓글",
+          "summary": "빠는 소리에 대하여",
+          "tones": {
+            "t1": "씹 빠는 소리 존ㄴㄴ나 더럽고 천박하네ㅋㅋㅋㅋㅋ 자지에 미친년이네 저거",
+            "t2": "윽엑윽; 침 소리 너무 나서 더러움;;;;; 불결불결;;;; 난 입 보지처럼 쓰는 애들 이해가 안 가더라 존나 더러운데ㅉㅉ"
+          },
+          "replies": []
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "board": "news",
+      "nick": "익명의 사과 2",
+      "time": "18분 전",
+      "views": 89,
+      "likes": 3,
+      "title": "[공지] 게시판 이용 규칙 안내",
+      "body": "1. 서로 존중하며 이야기해요.\n2. 개인정보는 올리지 않아요.\n3. 재미있게 놀아요.",
+      "comments": [],
+      "choices": []
+    }
+  ],
+  "writeChoices": [
+    {
+      "label": "1번 글",
+      "summary": "길고양이가 따라온 이야기",
+      "board": "chat",
+      "tones": {
+        "t1": {
+          "title": "오늘 길에서 고양이가 나 따라옴",
+          "body": "편의점 갔다 오는데 치즈냥이 집 앞까지 따라옴\n간식 줘야 되나 고민 중"
+        },
+        "t2": {
+          "title": "ㅠㅠ 오늘 길고양이가 나 따라왔어",
+          "body": "편의점 다녀오는 길에 치즈냥이가 집 앞까지 졸졸 따라왔어 ㅠㅠ\n너무 귀여운데 간식 줘도 될까?"
+        },
+        "t3": {
+          "title": "길고양이가 집까지 따라왔는데 어떻게 해야 할까요",
+          "body": "편의점 다녀오는 길에 치즈색 고양이가 집 앞까지 따라왔어요.\n간식을 줘도 괜찮을지 궁금합니다."
+        },
+        "t4": {
+          "title": "오늘 나를 고른 고양이",
+          "body": "편의점에서 돌아오는 길, 치즈색 고양이 한 마리가 집 앞까지 따라왔다.\n오늘은 내가 간택당한 날."
+        }
+      },
+      "autoComments": [
+        {
+          "nick": "익명의 사과 3",
+          "text": "헐 간택당했네 ㅋㅋㅋ"
+        },
+        {
+          "nick": "익명의 사과 9",
+          "text": "사진 없으면 무효인 거 알지?",
+          "delay": 2000
+        }
+      ],
+      "choices": [
+        {
+          "label": "1번 댓글",
+          "summary": "사진 올리겠다고 하기",
+          "tones": {
+            "t1": "ㅇㅋ 잠깐만 찍어옴",
+            "t2": "헉 찍어올게 기다려줘 ㅠㅠ",
+            "t3": "사진 찍어서 올려볼게요!",
+            "t4": "기록해둘게. 금방."
+          },
+          "replies": [
+            {
+              "nick": "익명의 사과 9",
+              "text": "기다린다 ㅋㅋ"
+            },
+            {
+              "nick": "익명의 사과 3",
+              "text": "츄르 들고 대기 중"
+            }
+          ]
+        },
+        {
+          "label": "2번 댓글",
+          "summary": "간식 줘도 되는지 묻기",
+          "tones": {
+            "t1": "근데 간식 줘도 됨?",
+            "t2": "근데 간식 줘도 괜찮을까…?",
+            "t3": "혹시 간식 줘도 괜찮을까요?",
+            "t4": "간식 하나쯤은 괜찮겠지."
+          },
+          "replies": [
+            {
+              "nick": "익명의 사과 3",
+              "text": "사람 음식 말고 고양이 전용 간식으로!"
+            },
+            {
+              "nick": "익명의 사과 9",
+              "text": "물도 같이 두면 좋아"
+            }
+          ]
+        }
+      ],
+      "nick": "익명의 사과 7",
+      "views": 11,
+      "likes": 4
+    },
+    {
+      "label": "2번 글",
+      "summary": "과제 마감 하소연",
+      "board": "worry",
+      "tones": {
+        "t1": {
+          "title": "과제 3개 마감 겹침 ㅋㅋ",
+          "body": "인생 망했다 ㅋㅋㅋ\n다들 이럴 때 어떻게 버팀"
+        },
+        "t2": {
+          "title": "과제 마감이 세 개나 겹쳤어 ㅠㅠ",
+          "body": "진짜 울고 싶다…\n다들 이럴 때 어떻게 버텨?"
+        },
+        "t3": {
+          "title": "과제 마감이 세 개 겹쳤어요",
+          "body": "이번 주에 마감이 몰려서 너무 힘드네요.\n다들 이럴 때 어떻게 버티시나요?"
+        },
+        "t4": {
+          "title": "마감 세 개",
+          "body": "이번 주는 마감이 세 번 온다.\n버티는 법을 아는 사람?"
+        }
+      },
+      "autoComments": [
+        {
+          "nick": "익명의 사과 2",
+          "text": "나도 두 개 겹침 같이 버티자"
+        }
+      ],
+      "choices": [],
+      "nick": "익명의 사과 7",
+      "views": 39,
+      "likes": 2
+    }
+  ],
+  "style": {
+    "lineHeight": 1.9,
+    "gap": 12
+  }
+}/*DATA_END*/;
+</script>
+<!-- ================================================================ -->
+
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $app = document.getElementById('app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// 글자 꾸미기: [b] [i] [u] [s] [color=#색] [size=sm|lg|xl]
+const deco = s => esc(s)
+  .replace(/\[(\/?)(b|i|u|s)\]/g, '<$1$2>')
+  .replace(/\[color=(#[0-9a-fA-F]{3,8})\]/g, '<span style="color:$1">').replace(/\[\/color\]/g, '</span>')
+  .replace(/\[size=(sm|lg|xl)\]/g, '<span class="fs-$1">').replace(/\[\/size\]/g, '</span>');
+const plain = s => String(s ?? '').replace(/\[\/?(b|i|u|s|color(=[^\]]*)?|size(=[^\]]*)?)\]/g, '');
+const nl = s => deco(s).replace(/\n/g, '<br>');
+const boardName = id => (DATA.boards.find(b => b.id === id) || {name:''}).name;
+const TONES = DATA.tones || [];
+(() => { const st = DATA.style || {}, r = document.documentElement.style;
+  r.setProperty('--lh', +st.lineHeight || 1.75); r.setProperty('--gap', (st.gap == null ? 12 : +st.gap) + 'px'); })();
+const NOTI = DATA.notifications || [];
+DATA.posts = DATA.posts || []; DATA.writeChoices = DATA.writeChoices || [];
+
+const I = {
+  home:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>',
+  fire:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-6 1-9z"/></svg>',
+  pen:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
+  bell:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>',
+  back:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  apple:'<svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7.5c-2.2-1.6-7.5-1.2-7.5 5 0 5 3.2 9 5.4 9 1 0 1.5-.6 2.1-.6s1.1.6 2.1.6c2.2 0 5.4-4 5.4-9 0-6.2-5.3-6.6-7.5-5z"/><path fill="#5BAA6A" d="M12 7.5c0-2.3 1.2-4.3 3.5-4.5 0 2.4-1.2 4.4-3.5 4.5z"/></svg>',
+  appleL:'<svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7.5c-2.2-1.6-7.5-1.2-7.5 5 0 5 3.2 9 5.4 9 1 0 1.5-.6 2.1-.6s1.1.6 2.1.6c2.2 0 5.4-4 5.4-9 0-6.2-5.3-6.6-7.5-5z"/><path fill="#5BAA6A" d="M12 7.5c0-2.3 1.2-4.3 3.5-4.5 0 2.4-1.2 4.4-3.5 4.5z"/></svg>',
+  eye:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  logo:'<span class="emo">🍎</span>'
+};
+
+const S = { view:'home', tab:'home', board:'all', postId:null, liked:{}, from:'home',
+            cwOpen:null, cwPick:null, cwTone:null, typing:{}, wPick:null, wTone:null, wUsed:{} };
+try { if (window.__INIT) Object.assign(S, window.__INIT); } catch(e) {}
+
+const unread = () => NOTI.filter(n => !n.read).length;
+const NOTI_IC = { comment:'💬', reply:'↪️', like:'🍎', notice:'📢' };
+const nextId = () => Math.max(0, ...DATA.posts.map(p => +p.id || 0)) + 1;
+const busy = () => { const a = document.activeElement; return a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && a.type !== 'checkbox')); };
+const keep = force => { if (!force && busy()) return; const y = scrollY; render(); scrollTo(0, y); };
+// 댓글 말투 값: "문장" 또는 { text, replies }
+const tv = v => !v ? null : typeof v === 'string' ? (v.trim() ? { text:v, replies:null } : null)
+                          : ((v.text || '').trim() ? { text:v.text, replies:v.replies || null } : null);
+// 글 말투 값: { title, body }
+const wtv = v => v && (v.title || '').trim() ? v : null;
+const hasText = r => (r.text || '').trim();
+const meOf = p => (p && p.me) || DATA.me;   // 이 글에서 신청자 닉네임
+const isLive = p => !!(p && p.live && p.live.on);
+const liveEnded = p => p._done && p.live.endMark !== false;
+const clock = () => { const d = new Date(); return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; };
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1600);
+}
+function currentPost(){ return DATA.posts.find(p => p.id === S.postId); }
+
+function topbar(){
+  if (S.view === 'post' || S.view === 'write') {
+    return `<header class="top"><button class="back" data-act="back" aria-label="뒤로">${I.back}</button>
+      <div class="title">${S.view==='write' ? '글쓰기' : esc(boardName((currentPost()||{}).board) || '게시글')}</div></header>`;
+  }
+  if (S.view === 'noti') {
+    return `<header class="top"><div class="title" style="padding-left:4px">알림</div><div class="grow"></div>
+      ${unread() ? '<button class="readall" data-act="readall">모두 읽음</button>' : ''}</header>`;
+  }
+  return `<header class="top"><div class="logo">${I.logo}${esc(DATA.site.name)}</div><div class="grow"></div></header>`;
+}
+
+function nav(){
+  const on = k => (S.view === 'home' || S.view === 'noti') && S.tab === k ? 'on' : '';
+  const n = unread();
+  return `<nav class="nav">
+    <button class="${on('home')}" data-act="tab" data-v="home">${I.home}<span>홈</span></button>
+    <button class="${on('hot')}" data-act="tab" data-v="hot">${I.fire}<span>인기</span></button>
+    <button class="write" data-act="write"><i>${I.pen}</i><span>글쓰기</span></button>
+    <button class="${on('noti')}" data-act="bell">${I.bell}${n>0?`<b class="badge">${n}</b>`:''}<span>알림</span></button>
+  </nav>`;
+}
+
+function listView(){
+  let posts = DATA.posts.slice();
+  if (S.tab === 'hot') posts.sort((a,b) => b.likes - a.likes);
+  if (S.board === '__live') posts = posts.filter(isLive);
+  else if (S.board !== 'all') posts = posts.filter(p => p.board === S.board);
+  const chips = [{id:'all',name:'전체'}, ...(DATA.posts.some(isLive) ? [{id:'__live',name:'🔴 LIVE'}] : []), ...DATA.boards]
+    .map(b => `<button class="chip ${S.board===b.id?'on':''}" data-act="board" data-v="${esc(b.id)}">${esc(b.name)}</button>`).join('');
+  const items = posts.length ? posts.map(p => `
+    <button class="item" data-act="open" data-v="${p.id}">
+      <span class="tag">${esc(boardName(p.board))}</span>
+      <div class="tt">${isLive(p) ? `<span class="live-b ${liveEnded(p)?'end':''}">LIVE</span>` : ''}<span>${deco(p.title)}</span>${p.comments.length ? `<span class="cm">[${p.comments.length}]</span>` : ''}</div>
+      <div class="pv">${esc(plain(p.body).replace(/\n+/g,' '))}</div>
+      <div class="meta"><span class="nick">${esc(p.nick)}</span><span>${esc(p.time)}</span><span class="grow"></span>
+        <span class="st">${I.eye}${p.views}</span><span class="st" style="color:var(--main)">${I.apple}${p.likes}</span></div>
+    </button>`).join('') : '<div class="empty">아직 글이 없어요 🍎</div>';
+  return `${topbar()}
+    ${DATA.site.notice ? `<div class="notice">${deco(DATA.site.notice)}</div>` : ''}
+    <div class="chips">${chips}</div><div class="list">${items}</div>${nav()}`;
+}
+
+// LIVE 글: 제목 + 본문 줄글만. 한 줄씩 올라오고, 선택 댓글 자리에선 멈춰서 댓글을 고르게 해요
+function livePostView(p){
+  const F = p._feed || [];
+  const flow = F.map((f, i) => f.k === 'gap' ? '<div class="lv-gap"></div>'
+    : (f.k === 'text' && !f.mine) ? `<p class="lv-a ${f.fresh ? 'fresh' : ''}">${nl(f.text)}</p>`
+    : `<p class="lv-c ${f.mine ? 'me' : ''} ${f.fresh ? 'fresh' : ''}"><b>${esc(f.nick)}</b><span class="col">:</span>${nl(f.text)}</p>`
+      + (f.snap ? `<button class="lv-re" data-act="lvRepick" data-v="${i}">↺ 다른 댓글로 다시 써보기</button>` : '')).join('');
+  return `${topbar()}
+    <article class="post live">
+      <h2><span class="live-b ${liveEnded(p)?'end':''}">${liveEnded(p) ? 'LIVE 종료' : 'LIVE'}</span>${deco(p.title)}</h2>
+      <div class="lv">
+        ${flow}
+        ${S.typing[p.id] ? `<p class="lv-typing"><b>${esc(S.typing[p.id])}</b>님이 입력 중<span class="dots"><i></i><i></i><i></i></span></p>` : ''}
+        ${p._wait ? lvPicker(p) : ''}
+        ${liveEnded(p) ? '<p class="lv-end">— 라이브가 끝났어요 —</p>' : ''}
+      </div>
+    </article>
+    ${writeBox(p)}
+    ${nav()}`;
+}
+function lvSel(p){
+  if (!p._wait || S.lpPick == null) return null;
+  if (S.lpPick === 'free') return 'free';
+  const c = p._wait.options[S.lpPick];
+  const v = c && S.lpTone && c.tones ? tv(c.tones[S.lpTone]) : null;
+  return v ? { text: v.text, replies: v.replies || c.replies || [] } : null;
+}
+function lvPicker(p){
+  const valid = validChoices(p._wait.options), sel = lvSel(p);
+  return `<div class="lv-pick"><div class="lv-pick-h">💬 여기서 댓글을 달아 주세요<small>라이브가 잠깐 멈췄어요</small></div>
+    <div class="cw-opts">${valid.map(({c, i, ts}) => `
+      <button class="cw-opt ${S.lpPick===i?'on':''}" data-act="lpPick" data-v="${i}">
+        <b>${esc(c.label || (i+1)+'번 댓글')} <span class="ar">${S.lpPick===i?'▾':'▸'}</span></b>${c.summary ? `<span>${deco(c.summary)}</span>` : ''}</button>
+      ${S.lpPick===i ? `<div class="cw-tones">${ts.map(({t, v}) =>
+        `<button class="cw-tone ${S.lpTone===t.id?'on':''}" data-act="lpTone" data-v="${esc(t.id)}"><em>${esc(t.name)}</em><span>${deco(v.text)}</span></button>`).join('')}</div>` : ''}`).join('')}
+      ${DATA.allowFree ? `<button class="cw-opt ${S.lpPick==='free'?'on':''}" data-act="lpPick" data-v="free"><b>직접 쓰기 <span class="ar">${S.lpPick==='free'?'▾':'▸'}</span></b><span>내 말로 자유롭게 쓰기</span></button>` : ''}
+    </div>
+    ${S.lpPick === 'free' ? '<textarea id="lpText" maxlength="300" placeholder="댓글을 입력하세요"></textarea>' : ''}
+    <div class="cw-foot"><span class="cw-me">${sel ? esc(meOf(p)) + '(으)로 등록' : '댓글과 말투를 골라주세요'}</span>
+      <button class="btn" data-act="lpSend" ${sel ? '' : 'disabled'}>등록</button></div></div>`;
+}
+
+function postView(){
+  const p = currentPost(); if (!p) { S.view='home'; return listView(); }
+  if (isLive(p)) return livePostView(p);
+  const liked = !!S.liked[p.id];
+  const cms = p.comments.map(c => `
+    <div class="cm-item ${c.reply?'re':''} ${c.upd?'upd':''} ${c.fresh?'fresh':''}">
+      <div class="h"><b>${esc(c.nick)}</b>${c.nick===p.nick ? '<span class="op">글쓴이</span>' : ''}${(c.mine || c.nick===meOf(p)) ? '<span class="me-b">나</span>' : ''}<span>${esc(c.time)}</span><span class="grow"></span>
+        <span class="lk">${I.apple}${c.likes||0}</span></div>
+      <div class="t">${nl(c.text)}</div>
+    </div>`).join('');
+  return `${topbar()}
+    <article class="post">
+      <span class="tag">${esc(boardName(p.board))}</span>
+      <h2>${deco(p.title)}</h2>
+      <div class="info"><span class="nick">${esc(p.nick)}</span><span>${esc(p.time)}</span><span style="flex:1"></span><span>조회 ${p.views}</span></div>
+      <div class="body">${nl(p.body)}</div>
+      <div class="actions"><button class="like ${liked?'on':''}" data-act="like">${I.appleL}<span>${p.likes + (liked?1:0)}</span></button></div>
+    </article>
+    ${isLive(p) ? (liveEnded(p) ? '<div class="live-bar end"><span class="live-dot"></span>LIVE 종료</div>'
+        : `<div class="live-bar"><span class="live-dot"></span>LIVE 진행 중<span style="flex:1"></span><span>👀 ${p.views}</span></div>`) : ''}
+    <div class="cmhead">${isLive(p) ? '실시간 댓글' : '댓글'} <span>${p.comments.length}</span></div>
+    ${cms || (S.typing[p.id] ? '' : '<div class="empty" style="padding:28px 0">첫 댓글을 남겨보세요</div>')}
+    ${S.typing[p.id] ? `<div class="typing"><b>${esc(S.typing[p.id])}</b>님이 ${isLive(p) ? '입력' : '댓글 쓰는'} 중<span class="dots"><i></i><i></i><i></i></span></div>` : ''}
+    ${isLive(p) && liveEnded(p) ? '<div class="live-end">— 라이브가 끝났어요 —</div>' : ''}
+    ${writeBox(p)}
+    ${nav()}`;
+}
+
+// 고를 수 있는 선택지만 (말투 문장이 하나라도 있는 것)
+const validChoices = list => (list || []).map((c, i) => ({ c, i,
+  ts: TONES.map(t => ({ t, v: tv(c.tones && c.tones[t.id]) })).filter(x => x.v) })).filter(x => x.ts.length);
+
+function writeBox(p){
+  if (S.typing[p.id] && !isLive(p)) return '';
+  if (isLive(p) && p._wait) return '';
+  if (p.chosen != null && !isLive(p))
+    return `<div class="cw"><button class="cw-reset" data-act="repick">↺ 다른 댓글로 다시 써보기</button></div>`;
+  const valid = validChoices(p.choices).filter(x => !(p._used && p._used[x.i]));
+  const open = S.cwOpen === p.id;
+  const freeBox = `<textarea id="cwText" maxlength="300" placeholder="댓글을 입력하세요"></textarea>
+      ${valid.length ? '<div class="cw-note">직접 쓴 댓글엔 대댓글이 달리지 않아요</div>' : ''}
+      <div class="cw-foot"><span class="cw-me">${esc(meOf(p))}(으)로 등록</span><button class="btn" data-act="cwsend">등록</button></div>`;
+  let panel = '';
+  if (open && !valid.length) panel = freeBox;
+  else if (open) {
+    const sel = toneSel(p);
+    panel = `<div class="cw-opts">${valid.map(({c, i, ts}) => `
+        <button class="cw-opt ${S.cwPick===i?'on':''}" data-act="pick" data-v="${i}">
+          <b>${esc(c.label || (i+1)+'번 댓글')} <span class="ar">${S.cwPick===i?'▾':'▸'}</span></b>${c.summary ? `<span>${deco(c.summary)}</span>` : ''}</button>
+        ${S.cwPick===i ? `<div class="cw-tones">${ts.map(({t, v}) =>
+            `<button class="cw-tone ${S.cwTone===t.id?'on':''}" data-act="tone" data-v="${esc(t.id)}"><em>${esc(t.name)}</em><span>${deco(v.text)}</span></button>`).join('')}</div>` : ''}`).join('')}
+        ${DATA.allowFree ? `<button class="cw-opt ${S.cwPick==='free'?'on':''}" data-act="pick" data-v="free"><b>직접 쓰기 <span class="ar">${S.cwPick==='free'?'▾':'▸'}</span></b><span>내 말로 자유롭게 쓰기</span></button>` : ''}
+      </div>
+      ${S.cwPick==='free' ? freeBox : `
+      <div class="cw-foot"><span class="cw-me">${sel ? esc(meOf(p))+'(으)로 등록' : '내용과 말투를 골라주세요'}</span>
+        <button class="btn" data-act="cwsend" ${sel ? '' : 'disabled'}>등록</button></div>`}`;
+  }
+  return `<div class="cw ${isLive(p) ? 'live-cw' : ''}">
+    <button class="cw-toggle ${open?'on':''}" data-act="cwtoggle"><span>✏️ 댓글 쓰기</span><span class="cw-arrow">▾</span></button>
+    ${open ? `<div class="cw-panel">${panel}</div>` : ''}
+  </div>`;
+}
+
+function toneSel(p){
+  const c = (p.choices || [])[S.cwPick];
+  if (!c || !S.cwTone || !c.tones) return null;
+  const v = tv(c.tones[S.cwTone]); if (!v) return null;
+  return { text: v.text, replies: v.replies || c.replies || [] };
+}
+
+// 댓글을 하나씩 순서대로 달아요
+function playSeq(p, list, done){
+  let i = 0;
+  const step = () => {
+    if (i >= list.length){ delete S.typing[p.id]; if (done) done(); keep(); return; }
+    const r = list[i];
+    S.typing[p.id] = r.nick || '익명'; keep();
+    p._timer = setTimeout(() => {
+      p.comments.forEach(c => c.fresh = false);
+      p.comments.push({ nick:r.nick, time:'방금', text:r.text, likes:+r.likes || 0, reply:!!r.reply, fresh:true });
+      i++; delete S.typing[p.id]; keep();
+      p.comments.forEach(c => c.fresh = false);
+      p._timer = setTimeout(step, 500);
+    }, +r.delay || 1500);
+  };
+  p._timer = setTimeout(step, 600);
+}
+
+// ── LIVE: 본문과 라이브 내용을 한 줄씩. 반응(대댓글)은 먼저 끼어들고, 선택 댓글 자리에선 멈춰요 ──
+function lvCompile(p){
+  const sp = +p.live.lineSpeed || 900, out = [];
+  const addText = (t, first, cont) => String(t || '').replace(/\s+$/, '').split('\n').forEach((ln, i) => {
+    out.push(ln.trim() ? { k:'text', nick:p.nick, text:ln, wait: i === 0 ? first : sp, cont: cont || i > 0 }
+                       : { k:'gap', wait: Math.min(sp, 300), cont:true });
+  });
+  if ((p.body || '').trim()) addText(p.body, 0, true);
+  (p.comments || []).filter(hasText).forEach(c => out.push(c.nick === p.nick
+    ? { k:'text', nick:c.nick, text:c.text, wait:700, cont:true } : { k:'cmt', nick:c.nick, text:c.text, wait:700, cont:true }));
+  ((p.live && p.live.lines) || []).forEach(l => {
+    if (l.type === 'pick'){ if (validChoices(l.options).length) out.push({ k:'pick', options:l.options, wait: +l.delay || 800 }); return; }
+    if (!hasText(l)) return;
+    const nick = l.nick || p.nick;
+    if (l.type === 'comment' && nick !== p.nick) out.push({ k:'cmt', nick, text:l.text, wait: +l.delay || 2000 });
+    else addText(l.text, +l.delay || 2500, false);
+  });
+  return out;
+}
+const lvReplies = (p, list) => (list || []).filter(hasText).map(r => { const n = r.nick || p.nick;
+  return { k: n === p.nick ? 'text' : 'cmt', nick: n, text: r.text, wait: +r.delay || 1500 }; });
+function liveRender(p, appended){
+  if (S.view === 'post' && S.postId === p.id){
+    if (busy()) return;
+    const el = document.documentElement, near = innerHeight + scrollY >= el.scrollHeight - 160, y = scrollY;
+    render(); scrollTo(0, appended && near ? el.scrollHeight : y);
+  } else if (S.view === 'home') keep();
+  (p._feed || []).forEach(f => f.fresh = false);     // 등장 효과는 처음 한 번만
+}
+function liveStart(p){
+  if (!isLive(p)) return;
+  if (!p._script){ p._script = lvCompile(p); p._si = 0; p._feed = []; p._q = []; p._wait = null; }
+  if (p._run || p._done || p._wait) return;
+  p._run = true; lvNext(p, +p.live.startDelay || 1200);
+}
+function lvNext(p, first){
+  const nx = p._q.length ? p._q[0] : (p._wait ? null : p._script[p._si]);
+  if (!nx){
+    p._run = false; delete S.typing[p.id];
+    if (!p._wait) p._done = true;
+    liveRender(p, true); return;
+  }
+  const wait = (first || 0) + (nx.wait || 0);
+  if (nx.k === 'pick'){
+    p._lt = setTimeout(() => { p._si++; p._wait = { options: nx.options, si: p._si - 1 }; p._run = false;
+      S.lpPick = null; S.lpTone = null; liveRender(p, true); }, wait);
+    return;
+  }
+  if (!nx.cont && nx.k !== 'gap' && wait >= 700){ S.typing[p.id] = nx.nick || p.nick; liveRender(p); }
+  p._lt = setTimeout(() => {
+    const r = p._q.length ? p._q.shift() : p._script[p._si++];
+    p._feed.push({ k: r.k, nick: r.nick, text: r.text, fresh: true });
+    delete S.typing[p.id]; liveRender(p, true);
+    lvNext(p);
+  }, wait);
+}
+function lvRun(p){ clearTimeout(p._lt); delete S.typing[p.id]; p._done = false; p._run = true; lvNext(p); }
+// 하단 댓글창에서 쓴 댓글: 지금 위치에 붙고, 반응이 먼저 이어져요
+function lvBoxSend(p, text, replies, ci){
+  if (!p._script) liveStart(p);
+  p._feed.push({ k:'cmt', nick: meOf(p), text, mine: true, fresh: true,
+                 snap: ci == null ? null : { feedLen: p._feed.length, si: p._si, wait: p._wait, ci } });
+  liveRender(p, true);
+  const add = lvReplies(p, replies);
+  if (add.length){ p._q = p._q.concat(add); lvRun(p); }
+}
+
+function writeView(){
+  const all = DATA.writeChoices;
+  const opts = DATA.boards.map(b => `<option value="${esc(b.id)}">${esc(b.name)}</option>`).join('');
+  const freeForm = `
+      <label>게시판</label><select id="wBoard">${opts}</select>
+      <label>제목</label><input id="wTitle" placeholder="제목을 입력하세요" maxlength="60">
+      <label>내용</label><textarea id="wBody" placeholder="내용을 입력하세요"></textarea>
+      ${all.length ? '<div class="cw-note">직접 쓴 글엔 준비된 댓글이 달리지 않아요</div>' : ''}
+      <div class="who">작성자: ${esc(DATA.me)} (익명)</div>
+      <button class="btn submit" data-act="submit">등록하기</button>`;
+  const wc = all.map((w, i) => ({ w, i, ts: TONES.map(t => ({ t, v: wtv(w.tones && w.tones[t.id]) })).filter(x => x.v) }))
+                .filter(x => x.ts.length && !S.wUsed[x.i]);
+  if (!wc.length && !all.length) return `${topbar()}<div class="form">${freeForm}</div>${nav()}`;
+  const sel = wSel();
+  const list = (wc.length || DATA.allowFree) ? `<div class="cw-opts">
+      ${wc.map(({w, i, ts}) => `
+        <button class="cw-opt ${S.wPick===i?'on':''}" data-act="wpick" data-v="${i}">
+          <b>${esc(w.label || (i+1)+'번 글')} <span class="ar">${S.wPick===i?'▾':'▸'}</span></b>${w.summary ? `<span>${deco(w.summary)}</span>` : ''}</button>
+        ${S.wPick===i ? `<div class="cw-tones">${ts.map(({t, v}) =>
+          `<button class="cw-tone ${S.wTone===t.id?'on':''}" data-act="wtone" data-v="${esc(t.id)}"><em>${esc(t.name)}</em><span><b>${deco(v.title)}</b>${v.body ? `<small>${esc(plain(v.body).split('\n')[0])}</small>` : ''}</span></button>`).join('')}</div>` : ''}`).join('')}
+      ${DATA.allowFree ? `<button class="cw-opt ${S.wPick==='free'?'on':''}" data-act="wpick" data-v="free"><b>직접 쓰기 <span class="ar">${S.wPick==='free'?'▾':'▸'}</span></b><span>내 말로 자유롭게 쓰기</span></button>` : ''}
+    </div>` : '<div class="empty">더 쓸 수 있는 글이 없어요 🍎</div>';
+  const bottom = S.wPick === 'free' ? freeForm
+    : sel ? `<div class="w-prev"><span class="tag">${esc(boardName(sel.board))}</span><h3>${deco(sel.title)}</h3><div>${nl(sel.body)}</div></div>
+             <button class="btn submit" data-act="wsubmit">등록하기</button>`
+    : wc.length ? '<button class="btn submit" disabled>내용과 말투를 골라주세요</button>' : '';
+  return `${topbar()}<div class="form"><div class="w-guide">어떤 글을 쓸까요?</div>${list}${bottom}</div>${nav()}`;
+}
+
+function wSel(){
+  const w = DATA.writeChoices[S.wPick];
+  if (!w || !S.wTone || !w.tones) return null;
+  const v = wtv(w.tones[S.wTone]); if (!v) return null;
+  return { w, board: w.board || (DATA.boards[0] || {}).id, title: v.title, body: v.body || '' };
+}
+
+function notiView(){
+  const items = NOTI.length ? NOTI.map((n, i) => {
+    const p = DATA.posts.find(x => x.id === n.postId);
+    return `<button class="noti-item ${n.read?'':'new'}" data-act="noti" data-v="${i}">
+      <span class="noti-ic">${NOTI_IC[n.type] || '🔔'}</span>
+      <span class="noti-tx">
+        <span class="m">${esc(n.type==='like' && n.count!=null ? `사과 ${n.count}개 수확!` : plain(n.text))}</span>
+        ${p ? `<span class="p">${deco(p.title)}</span>` : ''}
+        <span class="tm">${esc(n.time)}</span>
+      </span>
+      ${n.read ? '' : '<span class="dot"></span>'}
+    </button>`;
+  }).join('') : '<div class="empty">알림이 없어요 🍎</div>';
+  return `${topbar()}<div class="noti-list">${items}</div>${nav()}`;
+}
+
+function render(){
+  const drafts = {}; ['cwText','lpText'].forEach(id => { const d = document.getElementById(id); if (d && d.value) drafts[id] = d.value; });
+  $app.innerHTML = S.view==='post' ? postView() : S.view==='write' ? writeView() : S.view==='noti' ? notiView() : listView();
+  Object.keys(drafts).forEach(id => { const d2 = document.getElementById(id); if (d2) d2.value = drafts[id]; });
+  window.scrollTo(0,0);
+  try { if (window.parent !== window) window.parent.postMessage({ sgState: {
+    view: S.view==='write' ? 'home' : S.view, tab:S.tab, board:S.board, postId:S.postId, from:S.from } }, '*'); } catch(e) {}
+}
+
+const resetCw = () => { S.cwOpen = null; S.cwPick = null; S.cwTone = null; };
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el || el.disabled) return;
+  const act = el.dataset.act, v = el.dataset.v;
+  if (act==='tab'){ S.tab=v; S.view='home'; S.board='all'; render(); }
+  else if (act==='board'){ S.board=v; render(); }
+  else if (act==='open'){ S.from='home'; resetCw(); S.postId=+v; S.view='post'; render(); liveStart(currentPost()); }
+  else if (act==='back'){ S.view=S.from; render(); }
+  else if (act==='write'){ S.from = S.view==='noti' ? 'noti' : 'home'; S.wPick=null; S.wTone=null; S.view='write'; render(); }
+  else if (act==='bell'){
+    S.tab='noti'; S.view='noti'; render();
+    const n = unread();
+    toast(n ? `새 알림이 ${n}건 있어요` : '모든 알림을 확인했어요');
+  }
+  else if (act==='noti'){
+    const n = NOTI[+v]; n.read = true;
+    if (DATA.posts.some(p => p.id === n.postId)) { S.from='noti'; resetCw(); S.postId=n.postId; S.view='post'; render(); liveStart(currentPost()); }
+    else render();
+  }
+  else if (act==='readall'){ NOTI.forEach(n => n.read = true); render(); toast('모든 알림을 확인했어요'); }
+  else if (act==='like'){
+    S.liked[S.postId] = !S.liked[S.postId]; keep(true);
+    if (S.liked[S.postId]) toast('왕왕!');
+  }
+  // ── 댓글 ──
+  else if (act==='cwtoggle'){ const o = S.cwOpen===S.postId; resetCw(); if (!o) S.cwOpen = S.postId; keep(true); }
+  else if (act==='pick'){ const nv = v==='free' ? 'free' : +v; S.cwPick = S.cwPick===nv ? null : nv; S.cwTone = null; keep(true); }
+  else if (act==='tone'){ S.cwTone = v; keep(true); }
+  else if (act==='cwsend'){
+    const p = currentPost(); let text, replies = null;
+    const sel = toneSel(p);
+    if (sel){ text = sel.text; replies = sel.replies.filter(hasText).map(r => ({ ...r, reply: r.reply!==false }));
+              if (isLive(p)) (p._used = p._used || {})[S.cwPick] = true;
+              else { p.chosen = S.cwPick; p.chosenAt = p.comments.length; } }
+    else {
+      const ta = document.getElementById('cwText'); text = ta ? ta.value.trim() : '';
+      if (!text){ toast('댓글을 입력해 주세요'); return; }
+    }
+    if (isLive(p)){ const ci = sel ? S.cwPick : null; resetCw(); lvBoxSend(p, text, replies, ci); toast('댓글이 등록됐어요'); return; }
+    p.comments.forEach(c => c.fresh = false);
+    p.comments.push({ nick:meOf(p), time:'방금', text, likes:0, fresh:true, mine:true });
+    resetCw(); keep(true); toast('댓글이 등록됐어요');
+    p.comments.forEach(c => c.fresh = false);
+    if (replies && replies.length) playSeq(p, replies, () => {
+      const r = replies.find(x => x.nick !== meOf(p));
+      if (r) NOTI.unshift({ type:'reply', postId:p.id, time:'방금', read:false, text:`${r.nick}님이 답글을 달았어요` });
+    });
+  }
+  else if (act==='lpPick'){ const nv = v==='free' ? 'free' : +v; S.lpPick = S.lpPick===nv ? null : nv; S.lpTone = null; keep(true); }
+  else if (act==='lpTone'){ S.lpTone = v; keep(true); }
+  else if (act==='lpSend'){
+    const p = currentPost(), w = p && p._wait, sel = p && lvSel(p); if (!w || !sel) return;
+    let text, replies = [];
+    if (sel === 'free'){ const ta = document.getElementById('lpText'); text = ta ? ta.value.trim() : ''; if (!text){ toast('댓글을 입력해 주세요'); return; } }
+    else { text = sel.text; replies = sel.replies; }
+    p._feed.push({ k:'cmt', nick: meOf(p), text, mine: true, fresh: true, snap: { feedLen: p._feed.length, si: w.si, pick: true } });
+    p._wait = null; S.lpPick = null; S.lpTone = null;
+    p._q = lvReplies(p, replies);
+    liveRender(p, true); lvRun(p);
+  }
+  else if (act==='lvRepick'){
+    const p = currentPost(), it = p && p._feed && p._feed[+v]; if (!it || !it.snap) return;
+    clearTimeout(p._lt); delete S.typing[p.id];
+    const sn = it.snap;
+    p._feed.slice(sn.feedLen).forEach(f => { if (f.snap && f.snap.ci != null && p._used) p._used[f.snap.ci] = false; });
+    p._feed.length = sn.feedLen; p._q = []; p._done = false; p._run = false;
+    if (sn.pick){ p._si = sn.si + 1; p._wait = { options: p._script[sn.si].options, si: sn.si }; S.lpPick = null; S.lpTone = null; liveRender(p, true); }
+    else { p._si = sn.si; p._wait = sn.wait || null; resetCw(); S.cwOpen = p.id; keep(true); if (!p._wait) lvRun(p); }
+  }
+  else if (act==='repick'){
+    const p = currentPost(); clearTimeout(p._timer); delete S.typing[p.id];
+    p.comments.length = p.chosenAt; p.chosen = null;
+    resetCw(); S.cwOpen = p.id; keep(true);
+  }
+  // ── 글쓰기 ──
+  else if (act==='wpick'){ const nv = v==='free' ? 'free' : +v; S.wPick = S.wPick===nv ? null : nv; S.wTone = null; keep(true); }
+  else if (act==='wtone'){ S.wTone = v; keep(true); }
+  else if (act==='wsubmit'){
+    const sel = wSel(); if (!sel) return;
+    const id = nextId();
+    const wn = sel.w.nick || DATA.me;
+    const p = { id, board: sel.board, nick: wn, me: wn, time:'방금', views: +sel.w.views || 1, likes: +sel.w.likes || 0, title: sel.title, body: sel.body,
+                comments: [], choices: JSON.parse(JSON.stringify(sel.w.choices || [])) };
+    DATA.posts.unshift(p); S.wUsed[S.wPick] = true;
+    S.from='home'; resetCw(); S.postId=id; S.view='post'; render(); toast('글이 등록됐어요');
+    const ac = (sel.w.autoComments || []).filter(hasText).map(c => ({ ...c, reply: !!c.reply }));
+    if (ac.length) playSeq(p, ac, () => {
+      NOTI.unshift({ type:'comment', postId:id, time:'방금', read:false, text:`내 글에 댓글이 ${ac.length}개 달렸어요` });
+    });
+  }
+  else if (act==='submit'){
+    const title = document.getElementById('wTitle').value.trim();
+    const body = document.getElementById('wBody').value.trim();
+    if (!title || !body){ toast('제목과 내용을 입력해 주세요'); return; }
+    const id = nextId();
+    DATA.posts.unshift({ id, board: document.getElementById('wBoard').value, nick: DATA.me, time:'방금', views:0, likes:0, title, body, comments:[], choices:[] });
+    S.from='home'; resetCw(); S.postId = id; S.view='post'; render(); toast('글이 등록됐어요');
+  }
+});
+
+render();
+if (S.view === 'post' && currentPost()) liveStart(currentPost());
+</script>
+</body>
+</html>
