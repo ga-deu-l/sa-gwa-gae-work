@@ -1,1 +1,1603 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E8493F">
+<title>사과개 서식지</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8D%8E%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#FFF8F0; --card:#FFFFFF; --ink:#3B2A26; --sub:#8C7A74; --line:#F0E3D8;
+  --main:#E8493F; --main-deep:#C93A31; --main-soft:#FDE9E5; --leaf:#5BAA6A;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  font-size:15px;line-height:1.55}
+body{max-width:480px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit}
+svg{display:block}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:var(--main);color:#fff;
+  display:flex;align-items:center;gap:8px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top))}
+.top .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;letter-spacing:-.5px}
+.top .grow{flex:1}
+.top .back{width:32px;height:32px;display:grid;place-items:center;border-radius:50%}
+.top .back:active{background:rgba(255,255,255,.18)}
+.top .title{font-weight:700;font-size:16px}
+
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 14px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:7px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--sub)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* notice */
+.notice{margin:10px 14px 0;padding:10px 12px;background:var(--main-soft);border-radius:12px;font-size:13px;color:var(--main-deep);display:flex;gap:8px;align-items:center}
+
+/* list */
+.list{padding:10px 14px}
+.item{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
+.item:active{background:#fffaf6}
+.item .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--main-deep);background:var(--main-soft);padding:2px 8px;border-radius:999px;margin-bottom:6px}
+.item .tt{font-weight:700;font-size:16px;line-height:1.4;display:flex;gap:6px;align-items:baseline}
+.item .tt .cm{color:var(--main);font-size:13px;font-weight:800;flex:none}
+.item .pv{margin-top:4px;color:var(--sub);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{margin-top:10px;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--sub)}
+.meta .nick{font-weight:600;color:var(--ink)}
+.meta .st{display:flex;align-items:center;gap:3px}
+.meta .grow{flex:1}
+.empty{text-align:center;color:var(--sub);padding:56px 0}
+
+/* post */
+.post{padding:16px 14px 6px}
+.post .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--main-deep);background:var(--main-soft);padding:2px 8px;border-radius:999px}
+.post h2{font-size:20px;line-height:1.4;margin:8px 0 10px;letter-spacing:-.3px}
+.post .info{display:flex;gap:10px;align-items:center;font-size:12.5px;color:var(--sub);padding-bottom:14px;border-bottom:1px solid var(--line)}
+.post .info .nick{color:var(--ink);font-weight:700}
+.post .body{padding:16px 0;font-size:16px;line-height:1.75;word-break:break-word}
+.actions{display:flex;justify-content:center;gap:10px;padding:6px 0 18px}
+.like{display:flex;align-items:center;gap:6px;padding:10px 20px;border-radius:999px;border:1.5px solid #8FC76B;color:#6DB33F;font-weight:700;transition:background .2s,color .2s,border-color .2s}
+.like.on{background:var(--main);border-color:var(--main);color:#fff}
+.nav button{position:relative}
+.nav .badge{position:absolute;top:3px;left:calc(50% + 4px);min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--main);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center}
+
+/* comments */
+.cmhead{padding:14px;font-weight:800;border-top:8px solid var(--line);background:var(--bg)}
+.cmhead span{color:var(--main)}
+.cm-item{padding:12px 14px;border-bottom:1px solid var(--line);background:var(--card)}
+.cm-item.re{padding-left:34px;background:#fffbf7;position:relative}
+.cm-item.re::before{content:"↳";position:absolute;left:16px;top:12px;color:var(--sub)}
+.cm-item .h{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--sub)}
+.cm-item .h b{color:var(--ink)}
+.cm-item .op{font-size:11px;font-weight:800;color:#fff;background:var(--leaf);padding:1px 6px;border-radius:999px}
+.cm-item .h .grow{flex:1}
+.cm-item .t{margin-top:4px;word-break:break-word}
+.cm-item .lk{font-size:12.5px;color:var(--sub);display:flex;align-items:center;gap:3px}
+
+/* comment write (dropdown) */
+.cw{padding:12px 14px;background:var(--card);border-bottom:1px solid var(--line)}
+.cw-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-weight:700;color:var(--sub)}
+.cw-toggle.on{border-color:var(--main);color:var(--main)}
+.cw-arrow{transition:transform .2s}
+.cw-toggle.on .cw-arrow{transform:rotate(180deg)}
+.cw-panel{margin-top:10px;animation:drop .2s ease}
+@keyframes drop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.cw-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.cw-opt{text-align:left;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;display:flex;flex-direction:column;gap:2px}
+.cw-opt b{font-size:12px;color:var(--main-deep)}
+.cw-opt span{font-size:14px;color:var(--ink)}
+.cw-opt.on{border-color:var(--main);background:var(--main-soft)}
+.cw textarea{width:100%;min-height:72px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:none;resize:vertical;line-height:1.6}
+.cw textarea:focus{border-color:var(--main)}
+.cw-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.cw-me{font-size:12.5px;color:var(--sub)}
+.cw-foot .btn{height:38px}
+.cw-opt .ar{font-size:11px;color:var(--sub);margin-left:2px}
+.cw-tones{margin:-2px 0 2px 10px;padding-left:10px;border-left:2px solid var(--main-soft);display:flex;flex-direction:column;gap:6px;animation:drop .2s ease}
+.cw-tone{text-align:left;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;display:flex;gap:8px;align-items:flex-start}
+.cw-tone em{flex:none;font-style:normal;font-size:11px;font-weight:800;color:#fff;background:var(--sub);padding:2px 7px;border-radius:999px;margin-top:2px}
+.cw-tone span{font-size:14px;line-height:1.5}
+.cw-tone.on{border-color:var(--main);background:var(--main-soft)}
+.cw-tone.on em{background:var(--main)}
+.cw-note{font-size:12px;color:var(--sub);margin-top:6px}
+.btn:disabled{opacity:.4;cursor:default}
+.cw-reset{width:100%;padding:10px;border-radius:12px;border:1px dashed var(--sub);color:var(--sub);font-size:13.5px;font-weight:600}
+.cm-item .me-b{font-size:11px;font-weight:800;color:#fff;background:var(--main);padding:1px 6px;border-radius:999px}
+.cm-item.fresh{animation:drop .3s ease}
+.typing{padding:12px 14px 12px 34px;font-size:13px;color:var(--sub);background:#fffbf7;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:2px}
+.typing b{color:var(--ink)}
+.dots{display:inline-flex;gap:3px;margin-left:6px}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--sub);animation:blink 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+.btn{padding:0 18px;border-radius:999px;background:var(--main);color:#fff;font-weight:700}
+.btn:active{background:var(--main-deep)}
+
+/* write */
+.form{padding:14px}
+.form label{display:block;font-size:13px;font-weight:700;color:var(--sub);margin:14px 0 6px}
+.form select,.form input,.form textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:none}
+.form textarea{min-height:240px;resize:vertical;line-height:1.7}
+.form select:focus,.form input:focus,.form textarea:focus{border-color:var(--main)}
+.form .who{font-size:13px;color:var(--sub);margin-top:8px}
+.form .submit{width:100%;margin-top:18px;height:50px;font-size:16px}
+
+/* bottom nav */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;z-index:30;
+  display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom)}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 7px;font-size:11px;font-weight:600;color:var(--sub)}
+.nav button.on{color:var(--main)}
+.nav .write{color:#fff}
+.nav .write i{width:38px;height:38px;border-radius:50%;background:var(--main);display:grid;place-items:center;margin-top:-14px;box-shadow:0 4px 10px rgba(232,73,63,.35)}
+.nav .write span{color:var(--sub)}
+
+/* notifications */
+.top .readall{color:#fff;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.2)}
+.noti-list{padding-top:4px}
+.noti-item{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:14px;border-bottom:1px solid var(--line);background:var(--card)}
+.noti-item.new{background:var(--main-soft)}
+.noti-item:active{filter:brightness(.97)}
+.noti-ic{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);font-size:17px}
+.noti-tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.noti-tx .m{font-size:14.5px;line-height:1.45}
+.noti-tx .p{font-size:13px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.noti-tx .tm{font-size:12px;color:var(--sub);margin-top:4px}
+.noti-item .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--main);margin-top:6px}
+
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;white-space:nowrap}
+.toast.show{opacity:1}
+.top .logo .emo{font-size:24px;line-height:1}
+/* LIVE */
+.live-b{flex:none;align-self:center;font-size:10.5px;font-weight:800;color:#fff;background:#FF3B30;padding:1px 6px;border-radius:4px;letter-spacing:.5px}
+.live-b.end{background:var(--sub)}
+.live-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#2B1F1C;color:#fff;font-size:13px;font-weight:700}
+.live-bar.end{background:#8C7A74}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#FF4B3E;animation:blink 1.2s infinite}
+.live-bar.end .live-dot{background:#eee;animation:none}
+.cm-item.upd{background:#FFF4F2;border-left:3px solid var(--main)}
+.cm-item.upd .t{font-size:15.5px}
+.live-end{text-align:center;color:var(--sub);font-size:12.5px;padding:14px;background:var(--card);border-bottom:1px solid var(--line)}
+.cw.live-cw{position:fixed;left:50%;transform:translateX(-50%);width:100%;max-width:480px;bottom:calc(56px + env(safe-area-inset-bottom));z-index:25;box-shadow:0 -6px 14px rgba(59,42,38,.08);border-top:1px solid var(--line)}
+.cw.live-cw .cw-opts{max-height:40vh;overflow:auto;overscroll-behavior:contain}
+/* LIVE 본문 */
+.post.live{padding-bottom:110px}
+.post.live h2{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.post.live h2 .live-b{font-size:11px;padding:2px 7px;display:inline-flex;align-items:center;gap:4px}
+.post.live h2 .live-b::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff;animation:blink 1.2s infinite}
+.post.live h2 .live-b.end::before{animation:none;opacity:.7}
+.lv{padding:6px 0 0;border-top:1px solid var(--line)}
+.lv p{margin:0 0 12px;word-break:break-word}
+.lv .lv-a{font-size:16px;line-height:1.75;color:var(--ink)}
+.lv .lv-c{font-size:14.5px;line-height:1.6;color:#7A6862;padding-left:10px;border-left:2px solid var(--line)}
+.lv .lv-c b{font-size:13px;font-weight:700;color:#5A4843;margin-right:6px}
+.lv .lv-c.me{color:var(--main);border-left-color:var(--main)}
+.lv .lv-c.me b{color:var(--main)}
+.lv .fresh{animation:drop .3s ease}
+.lv .lv-typing{font-size:13px;color:var(--sub);display:flex;align-items:center}
+.lv .lv-end{text-align:center;color:var(--sub);font-size:12.5px;margin-top:16px}
+.post .body,.lv .lv-a{line-height:var(--lh,1.75)}
+.lv p{margin-bottom:var(--gap,12px)}
+.lv-gap{height:calc(var(--gap,12px) + 4px)}
+.lv-re{display:inline-block;font-size:12px;font-weight:600;color:var(--sub);border:1px dashed #CDBFB9;border-radius:999px;padding:3px 10px;margin:-4px 0 12px 12px;background:#fff}
+.lv-pick{margin:4px 0 14px;padding:12px;border:1.5px solid var(--main);border-radius:14px;background:#fff;animation:drop .25s ease}
+.lv-pick-h{font-weight:800;font-size:14px;margin-bottom:10px;color:var(--main-deep)}
+.lv-pick-h small{font-weight:500;color:var(--sub);margin-left:4px}
+.lv-pick textarea{width:100%;min-height:72px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:none;resize:vertical;line-height:1.6;margin-bottom:4px}
+.fs-sm{font-size:.85em}.fs-lg{font-size:1.25em}.fs-xl{font-size:1.6em;line-height:1.3}
+.lv .lv-c .col{color:#B3A49E;margin:0 5px 0 1px}
+.lv .lv-c.me .col{color:var(--main)}
+/* write by choice */
+.w-guide{font-weight:800;font-size:16px;margin:4px 0 10px}
+.cw-tone span b{display:block;font-size:14px;color:var(--ink)}
+.cw-tone span small{display:block;color:var(--sub);font-size:12.5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+.w-prev{margin-top:6px;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line);animation:drop .2s ease}
+.w-prev .tag{display:inline-block;font-size:12px;font-weight:700;color:var(--main-deep);background:var(--main-soft);padding:2px 8px;border-radius:999px}
+.w-prev h3{font-size:17px;margin:8px 0 6px;line-height:1.4}
+.w-prev div{font-size:14.5px;line-height:1.7;color:var(--ink)}
+.form .cw-note{margin-top:8px}
+.w-re{margin:0 0 14px}
+</style>
+</head>
+<body>
+
+<!-- ============ 데이터 영역: 편집기에서 저장하면 이 부분이 자동으로 채워져요 ============ -->
+<script>
+const DATA = /*DATA_START*/{
+  "site": {
+    "name": "사과개 서식지",
+    "notice": "📢 건전한 인터넷 문화를 지켜주세요"
+  },
+  "me": "익명의 사과 7",
+  "allowFree": true,
+  "style": {
+    "lineHeight": 1.75,
+    "gap": 12
+  },
+  "boards": [
+    {
+      "id": "chat",
+      "name": "떠들개"
+    },
+    {
+      "id": "ask",
+      "name": "물어보개"
+    },
+    {
+      "id": "worry",
+      "name": "고민되개"
+    },
+    {
+      "id": "news",
+      "name": "알려주개"
+    }
+  ],
+  "tones": [
+    {
+      "id": "t1",
+      "name": "1번"
+    },
+    {
+      "id": "t2",
+      "name": "2번"
+    }
+  ],
+  "notifications": [
+    {
+      "type": "comment",
+      "postId": 3,
+      "time": "30분 전",
+      "read": false,
+      "text": "익명의 사과 67님이 댓글을 달았어요: 500만원보다 손 닿은 게 더 좋았다는 게 마음 너무 아프다 익명아 너 …",
+      "ref": "c81cdov7"
+    },
+    {
+      "type": "like",
+      "postId": 6,
+      "time": "1시간 전",
+      "read": false,
+      "count": 10,
+      "sync": true
+    },
+    {
+      "type": "reply",
+      "postId": 2,
+      "time": "어제",
+      "read": true,
+      "text": "익명의 사과 20님이 답글을 달았어요: 잘생겼어?",
+      "ref": "c8elbjr7"
+    }
+  ],
+  "posts": [
+    {
+      "id": 9,
+      "board": "chat",
+      "nick": "익명의 사과 46",
+      "time": "3분 전",
+      "views": 339,
+      "likes": 79,
+      "title": "이로써 근친충 대결 승자는",
+      "body": "형한테 달려들어 멱살 잡고 키스하는 동생이다",
+      "comments": [
+        {
+          "nick": "익명의 사과 37",
+          "time": "방금",
+          "text": "무슨 소리야? 형이 키스 받아주면서 허리 잡았댔잖아 형이 더 근친충이라고",
+          "likes": 10,
+          "reply": false,
+          "cid": "cwcmv9if"
+        },
+        {
+          "nick": "익명의 사과 21",
+          "time": "방금",
+          "text": "동생이 키스하다 넘어지면 걱정 되니까 잡아준 것 뿐임 형은 걍 착할 뿐이고 근친은 동생이 하는 거야",
+          "likes": 9,
+          "reply": true,
+          "cid": "ceqibfv3"
+        },
+        {
+          "nick": "익명의 사과 75",
+          "time": "방금",
+          "text": "진짜 무슨 소리야?;;; 너 혹시 게이 근친충 본인이야? 애초에 멀쩡한 형은 동생이 키스로 덤벼도 허리 안 잡아준다고 존나 패야 하는데 그걸 왜 허리를 잡아주냐고",
+          "likes": 4,
+          "reply": true,
+          "cid": "c6r4f2v7"
+        },
+        {
+          "nick": "익명의 사과 81",
+          "time": "방금",
+          "text": "근친 BL물 추천해줄 사람ㅎㅎ",
+          "likes": 1,
+          "reply": false,
+          "cid": "csmyw54v"
+        },
+        {
+          "nick": "익명의 사과 33",
+          "time": "방금",
+          "text": "이번에 런칭된 신작 꽤괜ㅎ (링크)",
+          "likes": 4,
+          "reply": true,
+          "cid": "cj8vnc0q"
+        }
+      ],
+      "choices": []
+    },
+    {
+      "id": 8,
+      "board": "chat",
+      "nick": "익명의 사과 57",
+      "time": "6분 전",
+      "views": 187,
+      "likes": 12,
+      "title": "나 확신함",
+      "body": "쌍둥이 게이 근친충 목격담 이거밖에 없을 리가 없는데 얘들아 누가 서치 좀 해봐 분명 목격담 더 있을거야 ",
+      "comments": [
+        {
+          "nick": "익명의 사과 73",
+          "time": "방금",
+          "text": "ㄹㅇ 있음 남초 커뮤니티에서 발견함 (링크)",
+          "likes": 8,
+          "reply": false,
+          "cid": "c14tnige"
+        }
+      ],
+      "choices": []
+    },
+    {
+      "id": 7,
+      "board": "chat",
+      "nick": "익명의 사과 72",
+      "time": "9분 전",
+      "views": 251,
+      "likes": 12,
+      "title": "근친충한테 당한 익명아 혹시 아직 있어?",
+      "body": "그 근친충 쌍둥이 형제 맞아?...",
+      "comments": [
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "헐 어떻게 알았어? 내가 썼나? 아 썼구나",
+          "likes": 8,
+          "reply": false,
+          "cid": "cdtskgbe"
+        },
+        {
+          "nick": "익명의 사과 72",
+          "time": "방금",
+          "text": "ㅋㅋ아니 그게...ㅋㅋㅋ 나도 본 거 같아서",
+          "likes": 140,
+          "reply": true,
+          "cid": "ccthg001"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "뭐라고?????",
+          "likes": 46,
+          "reply": true,
+          "cid": "ci3uwmcl"
+        },
+        {
+          "nick": "익명의 사과 92",
+          "time": "방금",
+          "text": "갱신되는~ 게시글 속에서~ 도파민의 향기가 느껴진 거야~",
+          "likes": 6,
+          "reply": false,
+          "cid": "cvyeq0tj"
+        },
+        {
+          "nick": "익명의 사과 55",
+          "time": "방금",
+          "text": "게이 근친충한테 당한 불쌍한 익명이가 하나 더 있다고?",
+          "likes": 11,
+          "reply": false,
+          "cid": "cykoq29d"
+        },
+        {
+          "nick": "익명의 사과 68",
+          "time": "방금",
+          "text": "넌 어쩌다 게이 근친충한테 당했어ㅠㅠ",
+          "likes": 11,
+          "reply": false,
+          "cid": "cl8i5cx0"
+        },
+        {
+          "nick": "익명의 사과 72",
+          "time": "방금",
+          "text": "ㅎㅎ... 나는 뭐 글 쓸 정도는 아니니까 짧게 댓글로 남길게. 솔직히 뭐 당한 게 아니라서... 나는 아마 동생 쪽을 만난 거 같아. 내가 만난 근친충은 좀 난폭하고 거칠었거든. 그 근친충 옆에 사람 주렁주렁 매달고 가다가 자기랑 얼굴 똑같은 사람 보더니 팰 것처럼 달려들어서는 멱살 잡고 키스하더라... 얼굴 같은 사람은 그냥 자기 멱살 잡은 남자 허리 잡아주고 둘이 혀를 끝내주게 섞어서 질척질척 쯉쯉 난리가 났는데... 그...ㅋㅋ 갑자기 쌍둥이가 대낮에 사람들 다 다니는 곳에서 혀 섞으면서 키스하는 거 봐서 너무 놀랐거든. 그래도 누가 믿어주겠냐 싶었는데 피해자가 있었구나",
+          "likes": 188,
+          "reply": false,
+          "cid": "c8ehrgxd"
+        }
+      ],
+      "choices": []
+    },
+    {
+      "id": 6,
+      "board": "chat",
+      "nick": "익명의 사과 8",
+      "time": "12분 전",
+      "views": 417,
+      "likes": 244,
+      "title": "그래도 너희가 웃어줘서 좀 낫다",
+      "body": "이제 덜 아픈 거 같아...",
+      "comments": [
+        {
+          "nick": "익명의 사과 9",
+          "time": "방금",
+          "text": "웃으면 안 되는데 익명이가 정말 레전드로 근친 형 게이 짝사랑한 게 느껴져서 참을 수가 없다",
+          "likes": 3,
+          "reply": false,
+          "cid": "crb1u53w"
+        },
+        {
+          "nick": "익명의 사과 96",
+          "time": "방금",
+          "text": "아무나 이거 좀 퍼가라 그 여자친구 분 아시게",
+          "likes": 6,
+          "reply": false,
+          "cid": "c4tek5yg"
+        },
+        {
+          "nick": "익명의 사과 72",
+          "time": "방금",
+          "text": "!!!삐용삐용 충격!!! 꽃집 앞에 게이 근친충 활보!!!!",
+          "likes": 9,
+          "reply": false,
+          "cid": "cudc0s85"
+        },
+        {
+          "nick": "익명의 사과 26",
+          "time": "방금",
+          "text": "게이가 문제인지 근친이 문제인지 이제 잘 모르겠음",
+          "likes": 3,
+          "reply": false,
+          "cid": "cynolz1y"
+        },
+        {
+          "nick": "익명의 사과 79",
+          "time": "방금",
+          "text": "걍 여자친구 있는데 다른 여자한테 여지 주고 그 상황에서 다른 사람이랑 입술 비빈 게 문제지ㅇㅇ",
+          "likes": 10,
+          "reply": true,
+          "cid": "cucjny6h"
+        },
+        {
+          "nick": "익명의 사과 48",
+          "time": "방금",
+          "text": "그러니까 근친이랑 게이는 좀 나중 문제라는 거지?",
+          "likes": 11,
+          "reply": true,
+          "cid": "c3lpxjq7"
+        },
+        {
+          "nick": "익명의 사과 11",
+          "time": "방금",
+          "text": "근친이랑 게이가 나중 문제가 맞는데 존나 큰 문제네 익명아 이 댓글 보여? 너는 짝남이 문어발 걸레인 거랑 게이인 거랑 근친충인 거랑 셋 중 뭐가 제일 충격적이었어?",
+          "likes": 9,
+          "reply": true,
+          "cid": "c40phs29"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "날 사랑하지 않는다는게...",
+          "likes": 4,
+          "reply": true,
+          "cid": "c5vvqi0y"
+        },
+        {
+          "nick": "익명의 사과 56",
+          "time": "방금",
+          "text": "ㄴ야 얘 답도 없다",
+          "likes": 4,
+          "reply": true,
+          "cid": "cnvzq9ws"
+        }
+      ],
+      "choices": []
+    },
+    {
+      "id": 5,
+      "board": "chat",
+      "nick": "익명의 사과 9",
+      "time": "15분 전",
+      "views": 515,
+      "likes": 469,
+      "title": "내가 원글 작성자 아닌데 우리 토론 좀 해보자 누가 더 근친충인지",
+      "body": "형을 위해 씹새끼 죽여준다고 하다가 키스로 입막음 당한 동생\n자기한테 지랄하는 동생 달래주려고 키스로 입막은 형\n누가 더 근친충임??",
+      "comments": [
+        {
+          "nick": "익명의 사과 10",
+          "time": "방금",
+          "text": "동생이 형 위해서 사람 죽이는 건 있을 수 있다고 생각함 근데 형이 동생한테 키스를 한다? 이건 말이 안 되는 근친충 행동임 있어서는 안 될 일이지 형 게이가 안정형 근친충인 이유가 있어 자기가 ㄹㅈㄷ 근친충이라서 동생의 지랄을 근친으로 받아 안아줄 수 있어서 안정형 근친충인 거야",
+          "likes": 9,
+          "reply": false,
+          "cid": "cjpyxaor"
+        },
+        {
+          "nick": "익명의 사과 92",
+          "time": "방금",
+          "text": "이건 그 둘의 근친 처음 시작으로 가서 누가 먼저 키스 시작했는지를 봐야 할 듯...",
+          "likes": 37,
+          "reply": false,
+          "cid": "cxtrdajj"
+        },
+        {
+          "nick": "익명의 사과 26",
+          "time": "방금",
+          "text": "원글 익명이가 봤을 때 형이 먼저 키스했다며 그러면 당연히 형이 더 근친충 아니야?",
+          "likes": 6,
+          "reply": false,
+          "cid": "c98cc9sf"
+        },
+        {
+          "nick": "익명의 사과 47",
+          "time": "방금",
+          "text": "얘들아 생각을 해 봐 형이 키스해준다고 얌전해지는 동생이 더 이상하지 않아? 내가 봤을 때 동생이 ㄹㅈㄷ 근친충임 동생이 진짜 개~ 미친~ 근친충이라서 형을 근친충으로 만든 거임 형은 게이 근친충인데 여자친구도 있다잖아 형은 멀쩡했는데 동생이 그렇게 만든 거임",
+          "likes": 12,
+          "reply": false,
+          "cid": "caesp4wj"
+        },
+        {
+          "nick": "익명의 사과 43",
+          "time": "방금",
+          "text": "여자친구 분 불쌍해서 어떡해 동생이랑 키스한 입술이랑 키스하는 거잖아...ㅠㅠ 그리고 나는 형이 더 근친충이라고 생각해 여자친구 있는데 동생한테 키스 한다? 제정신 아닌 거지",
+          "likes": 27,
+          "reply": false,
+          "cid": "cylfag0z"
+        },
+        {
+          "nick": "익명의 사과 51",
+          "time": "방금",
+          "text": "근데 동생도 만만치 않게 근친충인데 다들 형만 근친충이라 하는 거 좀 신기하네 개지랄하고 형 패고 그러다가 형이 키스해주면 갑자기 얌전해지는 거면 동생이 더 장난 아닌 거 아니야? 키스 받고 싶어서 지랄하는 거일 수도 있어 동생한테 속지마",
+          "likes": 20,
+          "reply": false,
+          "cid": "cy6w65ci"
+        }
+      ],
+      "choices": [
+        {
+          "label": "1번 댓글",
+          "summary": "형이 더 근친충이다",
+          "tones": {
+            "t1": "나 장녀인데 살면서 단 한 번도 동생이 지랄하는 거 키스로 조용히 만들겠다는 생각 한 적 없음 누가 돈 주라고 해도 못 한다고 이거 형이 진짜 근친충이 맞음ㅇㅇ 동생도 형이 키스해줄 때마다 당황할걸? 조용해지는 게 형이 제정신 아닌 미친 짓해서 그러는 거임 이건 형이 더 근친충이 맞음",
+            "t2": "아무리 생각해도 내가 쌍둥이 게이 근친충이 아니어서 저러는 거 하나도 공감이 안 되지만 어떻게든 생각해 봤는데... 동생이 귀여울 수 있어 귀여우면 뽀뽀하고 싶을 수도 있지 나이 차이 많이 나면ㅋㅋㅋ 그런데 지금 형은 쌍둥이 동생 심지어 성격 안 좋아 보이는 동생한테 뽀뽀도 아니고 혀 섞어서 키스하는 거잖아 이건 형이 더 근친충인게 맞지... 안 귀여운 동생한테 키스해주는 게 말이 돼? 설령 동생이 키스하자고 꼬셨어도 거절하는 게 맞지 형이 근친충이네;"
+          },
+          "replies": [
+            {
+              "nick": "익명의 사과 61",
+              "text": "그치 형이 근친충이지 형이 더 근친충이 맞지!!!!!!",
+              "delay": 1500,
+              "likes": 0
+            }
+          ]
+        },
+        {
+          "label": "2번 댓글",
+          "summary": "동생이 더 근친충이다",
+          "tones": {
+            "t1": "얘들아 너희는 진지하게 인물이 어떤지 파악을 안 하고 있어 내가 심리학도로서 보자면 지금 이건 동생이 더 근친충이 맞아 왜냐고? 당연하지 너희 말대로 형이 근친충이어서 키스를 했으면 동생이 형을 피하고 도망치는 게 맞아 그런데 지금 동생하는 걸 봐 화를 계속 내면서 형한테 키스를 은근슬쩍 요구하고 있잖아 이거는 동생이 근친충이어서 형의 한숨과 자기를 향해 쏟아지는 어쩔 수 없는 애정을 키스라는 스킨십을 통해 즐기고 있다고 동생 이거 상종 못 할 근친충이야 이건 형이 도망치는 게 맞아",
+            "t2": "형은 여자친구 있다며 그러면 형은 충분히 정상성 수행 가능한 사람 아니야? 그런 멀쩡한 사람 미친 짓하게 만든 게 누구야 동생이잖아 얘들아 너희 원래 멀쩡한 사람이 괴롭힘 당해서 정신 망가졌는데 거기다 대고 그 사람한테 넌 원래 정신병자였어!! 라고 소리지를 거냐고~ㅠㅠ 얘들아 이건 동생이 미친 근친충이어서 멀쩡한 형 괴롭혀서 결국 형이 자기한테 키스하게 만든 거라고 아 형 진짜 너무 불쌍하다 이 형은 그냥 여자친구랑 잘 지내고 싶을 텐데 근친충 동생한테 걸려서 키스까지 하고 여기서 근친충으로 오해 받고...ㅠㅠ"
+          },
+          "replies": [
+            {
+              "nick": "익명의 사과 17",
+              "text": "윗댓 익명이한테 진짜완전개큰티라노만큼 동의해 미친 짓을 하게 만들고 그 미친 짓을 받아내고 있잖아 동생은 은교 근친충인거야",
+              "delay": 1500,
+              "likes": 66
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "board": "chat",
+      "nick": "익명의 사과 8",
+      "time": "18분 전",
+      "views": 1101,
+      "likes": 899,
+      "title": "고마워 얘들아 내 이야기가 중요한 게 아니지 욕 좀 해 줘",
+      "body": "짝남이 게이 근친충인 걸 어떻게 알았냐면 내가 짝남이 지 동생이랑 존나 키스하는 걸 봐서 그래 씨발 혀도 섞더라 아 더러워",
+      "comments": [
+        {
+          "nick": "익명의 사과 68",
+          "time": "방금",
+          "text": "왜 이 중요한 건 자세히 안 부는 건데",
+          "likes": 11,
+          "reply": false,
+          "cid": "cy0kwya8"
+        },
+        {
+          "nick": "익명의 사과 10",
+          "time": "방금",
+          "text": "혀 섞었어????????? 너 혀 봤어?????? 게이가 근친 키스하는 거 혀 낼름낼름 너 봤다고?????????",
+          "likes": 7,
+          "reply": false,
+          "cid": "cvoz1xr9"
+        },
+        {
+          "nick": "익명의 사과 91",
+          "time": "방금",
+          "text": "동생인 건 어떻게 알았어",
+          "likes": 5,
+          "reply": false,
+          "cid": "cyweltn3"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "내 꽃집에 지 동생이라고 소개시켜줬어 쌍둥이더라 씨발 더 더러워 자기랑 존나 똑같은 얼굴이랑 게이 근친짓 하고 싶나?",
+          "likes": 12,
+          "reply": true,
+          "cid": "ci6x71cv"
+        },
+        {
+          "nick": "익명의 사과 22",
+          "time": "방금",
+          "text": "쌍둥이 형제끼리 게이 근친충ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+          "likes": 4,
+          "reply": false,
+          "cid": "c74n94z7"
+        },
+        {
+          "nick": "익명의 사과 25",
+          "time": "방금",
+          "text": "형이 키스한 거야 동생이 키스한 거야? 궁금",
+          "likes": 4,
+          "reply": false,
+          "cid": "csid0ybw"
+        },
+        {
+          "nick": "익명의 사과 61",
+          "time": "방금",
+          "text": "그래 이거 중요하지 누가 더 근친충이야?",
+          "likes": 1,
+          "reply": true,
+          "cid": "cwxlbzdi"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "내가 봤을 때 동생이 지랄하며 화내니까 형이 한숨 쉬더니 조용히 좀 하라고 키스함 형이 더 근친충 같아",
+          "likes": 9,
+          "reply": true,
+          "cid": "ciba9xre"
+        },
+        {
+          "nick": "익명의 사과 23",
+          "time": "방금",
+          "text": "쉿... 조용히 해 나의 아기 고양이 자꾸 그러면 내가 입으로 막아주겠어...☆ 이게 실제로 일어나는 일이구나",
+          "likes": 7,
+          "reply": true,
+          "cid": "crsiz9am"
+        },
+        {
+          "nick": "익명의 사과 18",
+          "time": "방금",
+          "text": "짝남 게이 근친충 주제에 존나 안정형 같다...ㅎ",
+          "likes": 6,
+          "reply": true,
+          "cid": "cx8y4hev"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "그런 거 같음 동생이 계속 개지랄하면서 그 씹새끼 내가 죽여준다니까 왜 착한 척하냐면서 형 존나 팼는데 그때마다 키스로 입 막음",
+          "likes": 8,
+          "reply": true,
+          "cid": "cdsb73hh"
+        },
+        {
+          "nick": "익명의 사과 14",
+          "time": "방금",
+          "text": "로맨틱 게이 근친충",
+          "likes": 0,
+          "reply": true,
+          "cid": "ck0z4krt"
+        },
+        {
+          "nick": "익명의 사과 53",
+          "time": "방금",
+          "text": "키스 어디서 했어??",
+          "likes": 0,
+          "reply": false,
+          "cid": "czf07wek"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "내 가게 앞에서",
+          "likes": 5,
+          "reply": true,
+          "cid": "cm6zd54a"
+        },
+        {
+          "nick": "익명의 사과 19",
+          "time": "방금",
+          "text": "익명이랑 운명적이고 로맨틱한 만남이 이루어진 그곳에서 게이 근친 키스를 했다고?????????",
+          "likes": 11,
+          "reply": true,
+          "cid": "c03zl9i3"
+        },
+        {
+          "nick": "익명의 사과 33",
+          "time": "방금",
+          "text": "아니 미친 거 아니야? 남의 사업장 앞에서 무슨 짓이야?",
+          "likes": 1,
+          "reply": true,
+          "cid": "cthgj2nm"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "지나다니는 사람은 없었어...",
+          "likes": 10,
+          "reply": true,
+          "cid": "chhfu7b7"
+        },
+        {
+          "nick": "익명의 사과 21",
+          "time": "방금",
+          "text": "익명아 실드를 왜 치니 너 아직 정신 못 차렸니?",
+          "likes": 6,
+          "reply": true,
+          "cid": "cd70qneb"
+        },
+        {
+          "nick": "익명의 사과 29",
+          "time": "방금",
+          "text": "익명아 너희 꽃집 어디야? 네 꽃집 로맨스랑 게이 근친이 동시에 벌어지는 곳이잖아 거기에서 독립 영화 좀 찍어야겠다 너도 그냥 그렇게 홍보해 가게 앞에서 피 흘리며 쓰러져도 되고 게이 근친 키스해도 된다고ㅋㅋㅋㅋ",
+          "likes": 2,
+          "reply": false,
+          "cid": "ccp9xo3r"
+        },
+        {
+          "nick": "익명의 사과 62",
+          "time": "방금",
+          "text": "익명아 나 ㄹㅇ 독립 영화 감동인데 요새 찍을 곳이 없다 촬영 협조 좀ㅠㅠ",
+          "likes": 3,
+          "reply": true,
+          "cid": "coz1o8vr"
+        }
+      ],
+      "choices": []
+    },
+    {
+      "id": 3,
+      "board": "chat",
+      "nick": "익명의 사과 8",
+      "time": "21분 전",
+      "views": 1500,
+      "likes": 1114,
+      "title": "잠깐 물 마시고 왔어 이어 쓸게 짝남이 근친충인 이야기",
+      "body": "아무튼 짝남이 다시 나타나서 나한테 그때 고마웠다고 하면서 여기서 가장 비싸고 예쁜 꽃들로만 골라서 꽃다발 하나 해달라고 하더라고 엄청 크게 진짜진짜 예쁘게 그래서 내가 거의 뭐 화환 수준으로 만들었거든\n그걸 짝남 주니까 짝남이 솜씨가 좋다고 나 칭찬하면서 마음에 든다고 꽃다발 값 줬거든 \n대충 그게 10만원이라고 치자 그걸 500만원으로 값을 줬어 \n내가 너무 놀라서 보니까 입막음 값이래 그냥 그렇게 생각하래 그게 서로 편할 거라고...ㅋㅋ \n조금 수상했는데 난 걍 꽃다발 하나 주고 500만원 번 거잖아 너무 좋았지\n그리고 씨발 너무 설레서 걍 아무 생각을 못 했음 \n난... 난 500만원보다 짝남이 나한테 그 돈 줬을 때 살짝 손 닿은 게 너무너무 설레서...\n그 후로 짝남은 계속 내 꽃집에 찾아 왔어 \n처음에 입막음 값으로 500 준 이후로는 그냥 평범하게 꽃값 계산했는데 진짜 매일 왔어.\n매일... 매일 아닌가 난 그냥 매일 같았어 \n걍 그 짝남 생각만 했거든 \n매일 와서 제일 비싸고 예쁜 꽃으로 꽃다발 사가셨거든 \n이쯤이니 궁금하잖아 내가 왜 그걸 물어봤을까 내가 꽃다발 자주 사가시는데 꽃을 좋아하시냐고 물으니까 자기는 잘 모른대 \n그래서 느낌 좀 싸해서 여자친구 주시나요?ㅎㅎ 이러니까 나한테는 ^^ 이러고 웃던 사람이 *^0^* 이런 식으로 웃으면서 맞대 자기 여자친구 준대 씨발새끼가 그러면 왜 사람ㅇ르 설레게 했어 씨발 아 잠깐 여기서 귾을게",
+      "comments": [
+        {
+          "nick": "익명의 사과 9",
+          "time": "방금",
+          "text": "얘 마지막 가서 슬슬 오타 내네",
+          "likes": 1,
+          "reply": false,
+          "cid": "c7hrys1u"
+        },
+        {
+          "nick": "익명의 사과 67",
+          "time": "방금",
+          "text": "500만원보다 손 닿은 게 더 좋았다는 게 마음 너무 아프다 익명아 너 진짜 짝남 사랑했구나...",
+          "likes": 4,
+          "reply": false,
+          "cid": "c81cdov7"
+        },
+        {
+          "nick": "익명의 사과 46",
+          "time": "방금",
+          "text": "지금 짝남 이미 레전드 쓰레기 된 거 아니야? 여자친구 있는데 이러고 다녔다고?",
+          "likes": 6,
+          "reply": false,
+          "cid": "ckjhuqa5"
+        },
+        {
+          "nick": "익명의 사과 31",
+          "time": "방금",
+          "text": "ㅅㅈㅎ 난 아직 짝남 잘못 없다고 봄 걍 익명이가 먼저 좋아한 거잖아",
+          "likes": 8,
+          "reply": true,
+          "cid": "c2yfoocd"
+        },
+        {
+          "nick": "익명의 사과 46",
+          "time": "방금",
+          "text": "아니 정신 차려 진짜 제발 여자친구 있는데 다른 여자한테 저렇게 껄떡대는데 그게 제정신이야?",
+          "likes": 3,
+          "reply": true,
+          "cid": "cqlbuh7p"
+        },
+        {
+          "nick": "익명의 사과 31",
+          "time": "방금",
+          "text": "껄떡이라니 걍 짝남은 입막음 값 주고 여친 줄 꽃다발 사러 온 건데; 왤케 화났어 남친이 저러고 다니다가 환승했어?ㅋㅋㅋㅋ",
+          "likes": 4,
+          "reply": true,
+          "cid": "c8b56lst"
+        },
+        {
+          "nick": "익명의 사과 15",
+          "time": "방금",
+          "text": "익명아 미안한 말이지만 그냥 내용 다 스킵해서 게이 근친충인 거 어떻게 알았는지 그것만 말해주면 안 될까? 남의 연애사 안 궁금해",
+          "likes": 8,
+          "reply": false,
+          "cid": "cmzn0k48"
+        },
+        {
+          "nick": "익명의 사과 22",
+          "time": "방금",
+          "text": "말넘심ㅠㅠ",
+          "likes": 1,
+          "reply": true,
+          "cid": "ctoa0afx"
+        },
+        {
+          "nick": "익명의 사과 17",
+          "time": "방금",
+          "text": "상처 받지 말고 들어 익명아 너도 여기 올린 거 욕해달라고 올린 거잖아 그냥 짝남이 게이 근친인 거 썰만 풀어도 우리가 알아서 욕 해줄 테니까 안 궁금한 네 구구절절 이야기 스킵하자~",
+          "likes": 5,
+          "reply": true,
+          "cid": "cpgy428w"
+        }
+      ],
+      "choices": []
+    },
+    {
+      "id": 2,
+      "board": "chat",
+      "nick": "익명의 사과 8",
+      "time": "24분 전",
+      "views": 2250,
+      "likes": 1798,
+      "title": "친목질 신고 편하게 해 아무튼 짝남이 게이 근친충이었던 썰...txt",
+      "body": "[size=xl][color=#E8493F]솔직히 나는 짝남이랑 운명이라고 생각했음[/color][/size]\n왜냐하면 로맨스 클리셰로 나랑 짝남이랑 만났거든...\n내가 꽃집 하거든? 왜 꽃집 앞에 쓰러진 위험한 분위기의 잘생긴 남자 그런 거... 다들 영화 봤잖아\n진짜 짝남이랑 그렇게 만났어 내가 새벽 꽃시장에서 꽃 사 와서 가게 문 열려고 하는데 내 가게 유리문 앞에 짝남에 기대앉아 있었어... 키는 그렇게 크지 않았는데, 몸이 되게 좋아서 진짜 우리 가게 문이 다 가려지더라... 처음에는 취객인 줄 알았거든? 그래서 깨우려고 다가갔는데 뭔가... 뭔가 이상했어\n내가 뭐 소설처럼 주절대고 그래도 이해해주라 난 진짜 짝남이랑 그렇게 만났을 때 진짜 영화고 로맨스 소설이고 운명이라고 생각했거든 그래서 아 무슨 말을 하려고 하니까 말이 존나 길어진다 아무튼...\n가까이 가니까 보이더라. 짝남이 유리문에 기대고 있었는데, 나는 짝남이 까만 수트 입고 있어서 유리문에 그림자 진 거라고 생각했거든? 아니었어 그거 피였어... 너무 놀라서 119 부르려고 하니까, 안 된대. 그것만은 안 된대. 자기가 잠깐 쉬다가 알아서 갈 테니까 그냥 모르는 척하래. 서로를 위해서 그게 좋을 거래... 그래서 얼떨결에 알았다고 하고 그냥 내 꽃집에서 상처 좀 봐줬거든? 진짜 신기하게 나 가게 오픈할 때 되니까 사라져 있더라 난 진짜 꿈인 줄 알았어\n그런데 내게 다시 돌아왔어...",
+      "comments": [
+        {
+          "nick": "익명의 사과 31",
+          "time": "방금",
+          "text": "익명아 지금 레전드 짝남썰을 풀어야지 연애 소설을 쓰면 어떡해",
+          "likes": 3,
+          "reply": false,
+          "cid": "c24fgbwx"
+        },
+        {
+          "nick": "익명의 사과 54",
+          "time": "방금",
+          "text": "우리가 이해해주자 자기한테는 로맨스 소설이었다잖아",
+          "likes": 7,
+          "reply": true,
+          "cid": "cp0biq6p"
+        },
+        {
+          "nick": "익명의 사과 11",
+          "time": "방금",
+          "text": "꽃집 앞에 쓰러진 피투성이 수트 남자? 이게 진짜라고? 내가 익명이였어도 운명처럼 느꼈다...",
+          "likes": 11,
+          "reply": false,
+          "cid": "cob03bje"
+        },
+        {
+          "nick": "익명의 사과 20",
+          "time": "방금",
+          "text": "잘생겼어?",
+          "likes": 5,
+          "reply": false,
+          "cid": "c8elbjr7"
+        },
+        {
+          "nick": "익명의 사과 41",
+          "time": "방금",
+          "text": "그래 이거 중요함",
+          "likes": 7,
+          "reply": true,
+          "cid": "c0fcgy9x"
+        },
+        {
+          "nick": "익명의 사과 17",
+          "time": "방금",
+          "text": "익명아 어디 갔어 이거 대답해 줘",
+          "likes": 1,
+          "reply": true,
+          "cid": "c7td7ism"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "존나 잘생겼어...",
+          "likes": 257,
+          "reply": true,
+          "cid": "ce0de03i"
+        },
+        {
+          "nick": "익명의 사과 29",
+          "time": "방금",
+          "text": "익명아 그 얼굴 이야기를 먼저 했어야지!!!",
+          "likes": 3,
+          "reply": true,
+          "cid": "cm7kzgiy"
+        },
+        {
+          "nick": "익명의 사과 33",
+          "time": "방금",
+          "text": "레전드로 만난 그 남자가 레전드 개새끼로 끝나는 썰이라고 이게? 심지어 경험담이고?",
+          "likes": 9,
+          "reply": false,
+          "cid": "cohot58q"
+        }
+      ],
+      "choices": []
+    },
+    {
+      "id": 1,
+      "board": "chat",
+      "nick": "익명의 사과 8",
+      "time": "27분 전",
+      "views": 304,
+      "likes": 150,
+      "title": "레전드 짝남썰 대결하자 우선 나부터",
+      "body": "짝남 게이 근친충이었음\n",
+      "comments": [
+        {
+          "nick": "익명의 사과 9",
+          "time": "방금",
+          "text": "게임 이름 뭐야? 재밌어 보인당ㅋㅋ",
+          "likes": 2,
+          "reply": false,
+          "cid": "cjac3k1m"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "진짜임",
+          "likes": 67,
+          "reply": true,
+          "cid": "cttf6x6f"
+        },
+        {
+          "nick": "익명의 사과 10",
+          "time": "방금",
+          "text": "에이 구라치지 마",
+          "likes": 3,
+          "reply": true,
+          "cid": "c33uow68"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "진짜야",
+          "likes": 5,
+          "reply": true,
+          "cid": "cbt7a2zp"
+        },
+        {
+          "nick": "익명의 사과 11",
+          "time": "방금",
+          "text": "제발 구라라고 해줘",
+          "likes": 12,
+          "reply": true,
+          "cid": "cwaiy57w"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "나도 구라라고 하고 싶어",
+          "likes": 45,
+          "reply": true,
+          "cid": "cr53kojz"
+        },
+        {
+          "nick": "익명의 사과 12",
+          "time": "방금",
+          "text": "게이...? 근친...?",
+          "likes": 10,
+          "reply": false,
+          "cid": "cevr3w9d"
+        },
+        {
+          "nick": "익명의 사과 13",
+          "time": "방금",
+          "text": "짝남이랑 게이랑 같이 있는 것도 문제인데 게이랑 근친이 같이 있다고?",
+          "likes": 35,
+          "reply": false,
+          "cid": "cmg4liqu"
+        },
+        {
+          "nick": "익명의 사과 14",
+          "time": "방금",
+          "text": "ㅎㅎ; 익명아 그냥 네가 남자라고 말해 그러면 짝남이 게이인 건 문제가 아니잖아 빨리 네가 남자라고 말해...",
+          "likes": 11,
+          "reply": false,
+          "cid": "cgvcn19p"
+        },
+        {
+          "nick": "익명의 사과 8",
+          "time": "방금",
+          "text": "내가 남자면 짝남이랑 입술 한 변 비빌 수 있었을까...",
+          "likes": 710,
+          "reply": true,
+          "cid": "cenp0ffq"
+        },
+        {
+          "nick": "익명의 사과 15",
+          "time": "방금",
+          "text": "ㄴ얘 미친년이네 사랑 존나 지독하게 했네",
+          "likes": 235,
+          "reply": true,
+          "cid": "cwnv6oqa"
+        },
+        {
+          "nick": "익명의 사과 16",
+          "time": "방금",
+          "text": "내 일 아니니까 진짜 레전드 잼컨이다 익명아 썰 좀 쫙 풀어봐ㅋㅋㅋ",
+          "likes": 1,
+          "reply": false,
+          "cid": "cn9jtfnp"
+        },
+        {
+          "nick": "익명의 사과 17",
+          "time": "방금",
+          "text": "도파민에 미친 것; 익명아 나도 부탁할게~♡",
+          "likes": 2,
+          "reply": true,
+          "cid": "cf2l4sej"
+        }
+      ],
+      "choices": [
+        {
+          "label": "1번 댓글",
+          "summary": "글쓴이에 대한 비난",
+          "tones": {
+            "t1": "남자에 미쳐도 정도껏 미쳐야지...ㅠ 익명아 너 지금 걔가 게이 근친인데 아직도 짝남이라고 부르고 싶어?",
+            "t2": "ㅋㅋㅋㅋ더 안 들어도 알겠다 걍 쓰레기 때문에 고생한 흔한 이야기네 왜 못 먹을 걸 혼자 주워 먹으려다가 토하는 거야 나 진짜 너같은 애들 볼 때마다 열불나~"
+          },
+          "replies": [
+            {
+              "nick": "익명의 사과 8",
+              "text": "아니 내가 아무것도 모르고 사랑한 게 내 잘못이야?",
+              "delay": 1500,
+              "likes": 166
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "writeChoices": [
+    {
+      "label": "1번 글",
+      "summary": "근친 쌍둥이 형제 외모에 관한 이야기",
+      "board": "ask",
+      "nick": "익명의 사과 7",
+      "views": 35,
+      "likes": 5,
+      "tones": {
+        "t1": {
+          "title": "나도 내가 미친 거 아는데 진짜 하나만 물어볼게 지금 핫한 근친 게이 얼마나 잘생겼어?",
+          "body": "요새 미남이 좀 고파서...ㅠ\n근친 게이 쌍둥이면 나랑 엮일 일 없는 정말 눈으로만 볼 수 있는 안전한 미남들이잖아\n혹시 익명이 여기에다가 얼마나 잘생겼는지 묘사라도 해줄 수 있을까?ㅎㅎ\n아니 나 진짜 요새 !!!잘생긴!!! 남자가 너무 고픈데 요즘 다 개못생겨서...\n이렇게라도 미남을 갈구하는 나를 불쌍하게 여겨서 외모 묘사 좀 해주라"
+        },
+        "t2": {
+          "title": "그냥 웃겨서 근친 게이 쌍둥이 얼굴 한 번만 보고 싶다",
+          "body": "도대체 얼마나 얼굴이 잘났으면 글쓴 익명이가 아직도 못 잊고 절절매는거야?\n그냥 진짜 한 번만이라도 보고 싶네 어떻게 생겼길래??ㅋㅋㅋㅋㅋㅋ\n아니 게이이고 쌍둥이랑 혀 넣어서 키스하는 근친충이라는 것도 다 알게 됐는데도 왜 그렇게 애절한건데\n게이 쌍둥이 근친 도촬 이런 거 검색하면 좀 나오려나?"
+        }
+      },
+      "autoComments": [
+        {
+          "nick": "익명의 사과 8",
+          "text": "그냥 너무 내 취향이었어서 네 취향일지는 모르겠지만 그냥... 그냥 나는 꼬옥 안기고 싶었고 안아주고 싶었어...",
+          "delay": 1500,
+          "likes": 7,
+          "reply": false
+        },
+        {
+          "nick": "익명의 사과 21",
+          "text": "익명아 너 아직도 정신 못 차렸니...",
+          "delay": 1500,
+          "likes": 6,
+          "reply": true
+        }
+      ],
+      "choices": []
+    }
+  ]
+}/*DATA_END*/;
+</script>
+<!-- ================================================================ -->
+
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $app = document.getElementById('app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// 글자 꾸미기: [b] [i] [u] [s] [color=#색] [size=sm|lg|xl]
+const deco = s => esc(s)
+  .replace(/\[(\/?)(b|i|u|s)\]/g, '<$1$2>')
+  .replace(/\[color=(#[0-9a-fA-F]{3,8})\]/g, '<span style="color:$1">').replace(/\[\/color\]/g, '</span>')
+  .replace(/\[size=(sm|lg|xl)\]/g, '<span class="fs-$1">').replace(/\[\/size\]/g, '</span>');
+const plain = s => String(s ?? '').replace(/\[\/?(b|i|u|s|color(=[^\]]*)?|size(=[^\]]*)?)\]/g, '');
+const nl = s => deco(s).replace(/\n/g, '<br>');
+const shortTx = s => { const t = plain(s).split('\n')[0].trim(); return t.length > 40 ? t.slice(0, 40) + '…' : t; };
+// 알림: 연결된 댓글(ref)이 있으면 지금 댓글 내용으로 문구를 만들어요
+function notiText(n){
+  const p = DATA.posts.find(x => x.id === n.postId);
+  // 추천 알림: 연결된 글의 추천수를 그대로 따라가요 (직접 쓰기로 바꾼 알림만 count 사용)
+  if (n.type === 'like') return `사과 ${n.sync !== false && p ? (+p.likes || 0) + (S.liked[p.id] ? 1 : 0) : (+n.count || 0)}개 수확!`;
+  const pool = p ? (p.comments || []).concat(((p.live && p.live.lines) || []).filter(l => l.type === 'comment')) : [];
+  const c = n.ref && pool.find(x => x.cid === n.ref);
+  return c ? `${c.nick}님이 ${n.type === 'reply' ? '답글' : '댓글'}을 달았어요: ${shortTx(c.text)}` : plain(n.text);
+}
+const boardName = id => (DATA.boards.find(b => b.id === id) || {name:''}).name;
+const TONES = DATA.tones || [];
+(() => { const st = DATA.style || {}, r = document.documentElement.style;
+  r.setProperty('--lh', +st.lineHeight || 1.75); r.setProperty('--gap', (st.gap == null ? 12 : +st.gap) + 'px'); })();
+const NOTI = DATA.notifications || [];
+DATA.posts = DATA.posts || []; DATA.writeChoices = DATA.writeChoices || [];
+
+const I = {
+  home:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>',
+  fire:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-6 1-9z"/></svg>',
+  pen:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
+  bell:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>',
+  back:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  apple:'<svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7.5c-2.2-1.6-7.5-1.2-7.5 5 0 5 3.2 9 5.4 9 1 0 1.5-.6 2.1-.6s1.1.6 2.1.6c2.2 0 5.4-4 5.4-9 0-6.2-5.3-6.6-7.5-5z"/><path fill="#5BAA6A" d="M12 7.5c0-2.3 1.2-4.3 3.5-4.5 0 2.4-1.2 4.4-3.5 4.5z"/></svg>',
+  appleL:'<svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7.5c-2.2-1.6-7.5-1.2-7.5 5 0 5 3.2 9 5.4 9 1 0 1.5-.6 2.1-.6s1.1.6 2.1.6c2.2 0 5.4-4 5.4-9 0-6.2-5.3-6.6-7.5-5z"/><path fill="#5BAA6A" d="M12 7.5c0-2.3 1.2-4.3 3.5-4.5 0 2.4-1.2 4.4-3.5 4.5z"/></svg>',
+  eye:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  logo:'<span class="emo">🍎</span>'
+};
+
+const S = { view:'home', tab:'home', board:'all', postId:null, liked:{}, from:'home',
+            cwOpen:null, cwPick:null, cwTone:null, typing:{}, wPick:null, wTone:null, wUsed:{} };
+try { if (window.__INIT) Object.assign(S, window.__INIT); } catch(e) {}
+
+const unread = () => NOTI.filter(n => !n.read).length;
+const NOTI_IC = { comment:'💬', reply:'↪️', like:'🍎', notice:'📢' };
+const nextId = () => Math.max(0, ...DATA.posts.map(p => +p.id || 0)) + 1;
+const busy = () => { const a = document.activeElement; return a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && a.type !== 'checkbox')); };
+const keep = force => { if (!force && busy()) return; const y = scrollY; render(); scrollTo(0, y); };
+// 댓글 말투 값: "문장" 또는 { text, replies }
+const tv = v => !v ? null : typeof v === 'string' ? (v.trim() ? { text:v, replies:null } : null)
+                          : ((v.text || '').trim() ? { text:v.text, replies:v.replies || null } : null);
+// 글 말투 값: { title, body }
+const wtv = v => v && (v.title || '').trim() ? v : null;
+const hasText = r => (r.text || '').trim();
+const meOf = p => (p && p.me) || DATA.me;   // 이 글에서 신청자 닉네임
+const isLive = p => !!(p && p.live && p.live.on);
+const liveEnded = p => p._done && p.live.endMark !== false;
+const clock = () => { const d = new Date(); return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; };
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1600);
+}
+function currentPost(){ return DATA.posts.find(p => p.id === S.postId); }
+
+function topbar(){
+  if (S.view === 'post' || S.view === 'write') {
+    return `<header class="top"><button class="back" data-act="back" aria-label="뒤로">${I.back}</button>
+      <div class="title">${S.view==='write' ? '글쓰기' : esc(boardName((currentPost()||{}).board) || '게시글')}</div></header>`;
+  }
+  if (S.view === 'noti') {
+    return `<header class="top"><div class="title" style="padding-left:4px">알림</div><div class="grow"></div>
+      ${unread() ? '<button class="readall" data-act="readall">모두 읽음</button>' : ''}</header>`;
+  }
+  return `<header class="top"><div class="logo">${I.logo}${esc(DATA.site.name)}</div><div class="grow"></div></header>`;
+}
+
+function nav(){
+  const on = k => (S.view === 'home' || S.view === 'noti') && S.tab === k ? 'on' : '';
+  const n = unread();
+  return `<nav class="nav">
+    <button class="${on('home')}" data-act="tab" data-v="home">${I.home}<span>홈</span></button>
+    <button class="${on('hot')}" data-act="tab" data-v="hot">${I.fire}<span>인기</span></button>
+    <button class="write" data-act="write"><i>${I.pen}</i><span>글쓰기</span></button>
+    <button class="${on('noti')}" data-act="bell">${I.bell}${n>0?`<b class="badge">${n}</b>`:''}<span>알림</span></button>
+  </nav>`;
+}
+
+function listView(){
+  let posts = DATA.posts.slice();
+  if (S.tab === 'hot') posts.sort((a,b) => b.likes - a.likes);
+  if (S.board === '__live') posts = posts.filter(isLive);
+  else if (S.board !== 'all') posts = posts.filter(p => p.board === S.board);
+  const chips = [{id:'all',name:'전체'}, {id:'__live',name:'🔴 LIVE'}, ...DATA.boards]
+    .map(b => `<button class="chip ${S.board===b.id?'on':''}" data-act="board" data-v="${esc(b.id)}">${esc(b.name)}</button>`).join('');
+  const items = posts.length ? posts.map(p => `
+    <button class="item" data-act="open" data-v="${p.id}">
+      <span class="tag">${esc(boardName(p.board))}</span>
+      <div class="tt">${isLive(p) ? `<span class="live-b ${liveEnded(p)?'end':''}">LIVE</span>` : ''}<span>${deco(p.title)}</span>${p.comments.length ? `<span class="cm">[${p.comments.length}]</span>` : ''}</div>
+      <div class="pv">${esc(plain(p.body).replace(/\n+/g,' '))}</div>
+      <div class="meta"><span class="nick">${esc(p.nick)}</span><span>${esc(p.time)}</span><span class="grow"></span>
+        <span class="st">${I.eye}${p.views}</span><span class="st" style="color:var(--main)">${I.apple}${p.likes}</span></div>
+    </button>`).join('') : `<div class="empty">${S.board === '__live' ? '지금 진행되는 라이브가 없어요' : '아직 작성된 글이 없어요'}</div>`;
+  return `${topbar()}
+    ${DATA.site.notice ? `<div class="notice">${deco(DATA.site.notice)}</div>` : ''}
+    <div class="chips">${chips}</div><div class="list">${items}</div>${nav()}`;
+}
+
+// LIVE 글: 제목 + 본문 줄글만. 한 줄씩 올라오고, 선택 댓글 자리에선 멈춰서 댓글을 고르게 해요
+function livePostView(p){
+  const F = p._feed || [];
+  const flow = F.map((f, i) => f.k === 'gap' ? '<div class="lv-gap"></div>'
+    : (f.k === 'text' && !f.mine) ? `<p class="lv-a ${f.fresh ? 'fresh' : ''}">${nl(f.text)}</p>`
+    : `<p class="lv-c ${f.mine ? 'me' : ''} ${f.fresh ? 'fresh' : ''}"><b>${esc(f.nick)}</b><span class="col">:</span>${nl(f.text)}</p>`
+      + (f.snap ? `<button class="lv-re" data-act="lvRepick" data-v="${i}">↺ 다른 댓글로 다시 써보기</button>` : '')).join('');
+  return `${topbar()}
+    <article class="post live">
+      <h2><span class="live-b ${liveEnded(p)?'end':''}">${liveEnded(p) ? 'LIVE 종료' : 'LIVE'}</span>${deco(p.title)}</h2>
+      <div class="lv">
+        ${flow}
+        ${S.typing[p.id] ? `<p class="lv-typing"><b>${esc(S.typing[p.id])}</b>님이 입력 중<span class="dots"><i></i><i></i><i></i></span></p>` : ''}
+        ${p._wait ? lvPicker(p) : ''}
+        ${liveEnded(p) ? '<p class="lv-end">— 라이브가 끝났어요 —</p>' : ''}
+      </div>
+    </article>
+    ${writeBox(p)}
+    ${nav()}`;
+}
+function lvSel(p){
+  if (!p._wait || S.lpPick == null) return null;
+  if (S.lpPick === 'free') return 'free';
+  const c = p._wait.options[S.lpPick];
+  const v = c && S.lpTone && c.tones ? tv(c.tones[S.lpTone]) : null;
+  return v ? { text: v.text, replies: v.replies || c.replies || [] } : null;
+}
+function lvPicker(p){
+  const valid = validChoices(p._wait.options), sel = lvSel(p);
+  return `<div class="lv-pick"><div class="lv-pick-h">💬 여기서 댓글을 달아 주세요<small>라이브가 잠깐 멈췄어요</small></div>
+    <div class="cw-opts">${valid.map(({c, i, ts}) => `
+      <button class="cw-opt ${S.lpPick===i?'on':''}" data-act="lpPick" data-v="${i}">
+        <b>${esc(c.label || (i+1)+'번 댓글')} <span class="ar">${S.lpPick===i?'▾':'▸'}</span></b>${c.summary ? `<span>${deco(c.summary)}</span>` : ''}</button>
+      ${S.lpPick===i ? `<div class="cw-tones">${ts.map(({t, v}) =>
+        `<button class="cw-tone ${S.lpTone===t.id?'on':''}" data-act="lpTone" data-v="${esc(t.id)}"><em>${esc(t.name)}</em><span>${deco(v.text)}</span></button>`).join('')}</div>` : ''}`).join('')}
+      ${DATA.allowFree ? `<button class="cw-opt ${S.lpPick==='free'?'on':''}" data-act="lpPick" data-v="free"><b>직접 쓰기 <span class="ar">${S.lpPick==='free'?'▾':'▸'}</span></b><span>내 말로 자유롭게 쓰기</span></button>` : ''}
+    </div>
+    ${S.lpPick === 'free' ? '<textarea id="lpText" maxlength="300" placeholder="댓글을 입력하세요"></textarea>' : ''}
+    <div class="cw-foot"><span class="cw-me">${sel ? esc(meOf(p)) + '(으)로 등록' : '댓글과 말투를 골라주세요'}</span>
+      <button class="btn" data-act="lpSend" ${sel ? '' : 'disabled'}>등록</button></div></div>`;
+}
+
+function postView(){
+  const p = currentPost(); if (!p) { S.view='home'; return listView(); }
+  if (isLive(p)) return livePostView(p);
+  const liked = !!S.liked[p.id];
+  const cms = p.comments.map(c => `
+    <div class="cm-item ${c.reply?'re':''} ${c.upd?'upd':''} ${c.fresh?'fresh':''}">
+      <div class="h"><b>${esc(c.nick)}</b>${c.nick===p.nick ? '<span class="op">글쓴이</span>' : ''}${(c.mine || c.nick===meOf(p)) ? '<span class="me-b">나</span>' : ''}<span>${esc(c.time)}</span><span class="grow"></span>
+        <span class="lk">${I.apple}${c.likes||0}</span></div>
+      <div class="t">${nl(c.text)}</div>
+    </div>`).join('');
+  return `${topbar()}
+    <article class="post">
+      <span class="tag">${esc(boardName(p.board))}</span>
+      <h2>${deco(p.title)}</h2>
+      <div class="info"><span class="nick">${esc(p.nick)}</span><span>${esc(p.time)}</span><span style="flex:1"></span><span>조회 ${p.views}</span></div>
+      <div class="body">${nl(p.body)}</div>
+      <div class="actions"><button class="like ${liked?'on':''}" data-act="like">${I.appleL}<span>${p.likes + (liked?1:0)}</span></button></div>
+      ${p.fromW != null ? '<button class="cw-reset w-re" data-act="wRepick">↺ 다른 글로 다시 써보기</button>' : ''}
+    </article>
+    ${isLive(p) ? (liveEnded(p) ? '<div class="live-bar end"><span class="live-dot"></span>LIVE 종료</div>'
+        : `<div class="live-bar"><span class="live-dot"></span>LIVE 진행 중<span style="flex:1"></span><span>👀 ${p.views}</span></div>`) : ''}
+    <div class="cmhead">${isLive(p) ? '실시간 댓글' : '댓글'} <span>${p.comments.length}</span></div>
+    ${cms || (S.typing[p.id] ? '' : '<div class="empty" style="padding:28px 0">첫 댓글을 남겨보세요</div>')}
+    ${S.typing[p.id] ? `<div class="typing"><b>${esc(S.typing[p.id])}</b>님이 ${isLive(p) ? '입력' : '댓글 쓰는'} 중<span class="dots"><i></i><i></i><i></i></span></div>` : ''}
+    ${isLive(p) && liveEnded(p) ? '<div class="live-end">— 라이브가 끝났어요 —</div>' : ''}
+    ${writeBox(p)}
+    ${nav()}`;
+}
+
+// 고를 수 있는 선택지만 (말투 문장이 하나라도 있는 것)
+const validChoices = list => (list || []).map((c, i) => ({ c, i,
+  ts: TONES.map(t => ({ t, v: tv(c.tones && c.tones[t.id]) })).filter(x => x.v) })).filter(x => x.ts.length);
+
+function writeBox(p){
+  if (S.typing[p.id] && !isLive(p)) return '';
+  if (isLive(p) && p._wait) return '';
+  if (p.chosen != null && !isLive(p))
+    return `<div class="cw"><button class="cw-reset" data-act="repick">↺ 다른 댓글로 다시 써보기</button></div>`;
+  const valid = validChoices(p.choices).filter(x => !(p._used && p._used[x.i]));
+  const open = S.cwOpen === p.id;
+  const freeBox = `<textarea id="cwText" maxlength="300" placeholder="댓글을 입력하세요"></textarea>
+      ${valid.length ? '<div class="cw-note">직접 쓴 댓글엔 대댓글이 달리지 않아요</div>' : ''}
+      <div class="cw-foot"><span class="cw-me">${esc(meOf(p))}(으)로 등록</span><button class="btn" data-act="cwsend">등록</button></div>`;
+  let panel = '';
+  if (open && !valid.length) panel = freeBox;
+  else if (open) {
+    const sel = toneSel(p);
+    panel = `<div class="cw-opts">${valid.map(({c, i, ts}) => `
+        <button class="cw-opt ${S.cwPick===i?'on':''}" data-act="pick" data-v="${i}">
+          <b>${esc(c.label || (i+1)+'번 댓글')} <span class="ar">${S.cwPick===i?'▾':'▸'}</span></b>${c.summary ? `<span>${deco(c.summary)}</span>` : ''}</button>
+        ${S.cwPick===i ? `<div class="cw-tones">${ts.map(({t, v}) =>
+            `<button class="cw-tone ${S.cwTone===t.id?'on':''}" data-act="tone" data-v="${esc(t.id)}"><em>${esc(t.name)}</em><span>${deco(v.text)}</span></button>`).join('')}</div>` : ''}`).join('')}
+        ${DATA.allowFree ? `<button class="cw-opt ${S.cwPick==='free'?'on':''}" data-act="pick" data-v="free"><b>직접 쓰기 <span class="ar">${S.cwPick==='free'?'▾':'▸'}</span></b><span>내 말로 자유롭게 쓰기</span></button>` : ''}
+      </div>
+      ${S.cwPick==='free' ? freeBox : `
+      <div class="cw-foot"><span class="cw-me">${sel ? esc(meOf(p))+'(으)로 등록' : '내용과 말투를 골라주세요'}</span>
+        <button class="btn" data-act="cwsend" ${sel ? '' : 'disabled'}>등록</button></div>`}`;
+  }
+  return `<div class="cw ${isLive(p) ? 'live-cw' : ''}">
+    <button class="cw-toggle ${open?'on':''}" data-act="cwtoggle"><span>✏️ 댓글 쓰기</span><span class="cw-arrow">▾</span></button>
+    ${open ? `<div class="cw-panel">${panel}</div>` : ''}
+  </div>`;
+}
+
+function toneSel(p){
+  const c = (p.choices || [])[S.cwPick];
+  if (!c || !S.cwTone || !c.tones) return null;
+  const v = tv(c.tones[S.cwTone]); if (!v) return null;
+  return { text: v.text, replies: v.replies || c.replies || [] };
+}
+
+// 댓글을 하나씩 순서대로 달아요
+function playSeq(p, list, done){
+  let i = 0;
+  const step = () => {
+    if (i >= list.length){ delete S.typing[p.id]; if (done) done(); keep(); return; }
+    const r = list[i];
+    S.typing[p.id] = r.nick || '익명'; keep();
+    p._timer = setTimeout(() => {
+      p.comments.forEach(c => c.fresh = false);
+      p.comments.push({ nick:r.nick, time:'방금', text:r.text, likes:+r.likes || 0, reply:!!r.reply, fresh:true });
+      i++; delete S.typing[p.id]; keep();
+      p.comments.forEach(c => c.fresh = false);
+      p._timer = setTimeout(step, 500);
+    }, +r.delay || 1500);
+  };
+  p._timer = setTimeout(step, 600);
+}
+
+// ── LIVE: 본문과 라이브 내용을 한 줄씩. 반응(대댓글)은 먼저 끼어들고, 선택 댓글 자리에선 멈춰요 ──
+function lvCompile(p){
+  const sp = +p.live.lineSpeed || 900, out = [];
+  const addText = (t, first, cont) => String(t || '').replace(/\s+$/, '').split('\n').forEach((ln, i) => {
+    out.push(ln.trim() ? { k:'text', nick:p.nick, text:ln, wait: i === 0 ? first : sp, cont: cont || i > 0 }
+                       : { k:'gap', wait: Math.min(sp, 300), cont:true });
+  });
+  if ((p.body || '').trim()) addText(p.body, 0, true);
+  (p.comments || []).filter(hasText).forEach(c => out.push(c.nick === p.nick
+    ? { k:'text', nick:c.nick, text:c.text, wait:700, cont:true } : { k:'cmt', nick:c.nick, text:c.text, wait:700, cont:true }));
+  ((p.live && p.live.lines) || []).forEach(l => {
+    if (l.type === 'pick'){ if (validChoices(l.options).length) out.push({ k:'pick', options:l.options, wait: +l.delay || 800 }); return; }
+    if (!hasText(l)) return;
+    const nick = l.nick || p.nick;
+    if (l.type === 'comment' && nick !== p.nick) out.push({ k:'cmt', nick, text:l.text, wait: +l.delay || 2000 });
+    else addText(l.text, +l.delay || 2500, false);
+  });
+  return out;
+}
+const lvReplies = (p, list) => (list || []).filter(hasText).map(r => { const n = r.nick || p.nick;
+  return { k: n === p.nick ? 'text' : 'cmt', nick: n, text: r.text, wait: +r.delay || 1500 }; });
+function liveRender(p, appended){
+  if (S.view === 'post' && S.postId === p.id){
+    if (busy()) return;
+    const el = document.documentElement, near = innerHeight + scrollY >= el.scrollHeight - 160, y = scrollY;
+    render(); scrollTo(0, appended && near ? el.scrollHeight : y);
+  } else if (S.view === 'home') keep();
+  (p._feed || []).forEach(f => f.fresh = false);     // 등장 효과는 처음 한 번만
+}
+function liveStart(p){
+  if (!isLive(p)) return;
+  if (!p._script){ p._script = lvCompile(p); p._si = 0; p._feed = []; p._q = []; p._wait = null; }
+  if (p._run || p._done || p._wait) return;
+  p._run = true; lvNext(p, +p.live.startDelay || 1200);
+}
+function lvNext(p, first){
+  const nx = p._q.length ? p._q[0] : (p._wait ? null : p._script[p._si]);
+  if (!nx){
+    p._run = false; delete S.typing[p.id];
+    if (!p._wait) p._done = true;
+    liveRender(p, true); return;
+  }
+  const wait = (first || 0) + (nx.wait || 0);
+  if (nx.k === 'pick'){
+    p._lt = setTimeout(() => { p._si++; p._wait = { options: nx.options, si: p._si - 1 }; p._run = false;
+      S.lpPick = null; S.lpTone = null; liveRender(p, true); }, wait);
+    return;
+  }
+  if (!nx.cont && nx.k !== 'gap' && wait >= 700){ S.typing[p.id] = nx.nick || p.nick; liveRender(p); }
+  p._lt = setTimeout(() => {
+    const r = p._q.length ? p._q.shift() : p._script[p._si++];
+    p._feed.push({ k: r.k, nick: r.nick, text: r.text, fresh: true });
+    delete S.typing[p.id]; liveRender(p, true);
+    lvNext(p);
+  }, wait);
+}
+function lvRun(p){ clearTimeout(p._lt); delete S.typing[p.id]; p._done = false; p._run = true; lvNext(p); }
+// 하단 댓글창에서 쓴 댓글: 지금 위치에 붙고, 반응이 먼저 이어져요
+function lvBoxSend(p, text, replies, ci){
+  if (!p._script) liveStart(p);
+  p._feed.push({ k:'cmt', nick: meOf(p), text, mine: true, fresh: true,
+                 snap: ci == null ? null : { feedLen: p._feed.length, si: p._si, wait: p._wait, ci } });
+  liveRender(p, true);
+  const add = lvReplies(p, replies);
+  if (add.length){ p._q = p._q.concat(add); lvRun(p); }
+}
+
+function writeView(){
+  const all = DATA.writeChoices;
+  const opts = DATA.boards.map(b => `<option value="${esc(b.id)}">${esc(b.name)}</option>`).join('');
+  const freeForm = `
+      <label>게시판</label><select id="wBoard">${opts}</select>
+      <label>제목</label><input id="wTitle" placeholder="제목을 입력하세요" maxlength="60">
+      <label>내용</label><textarea id="wBody" placeholder="내용을 입력하세요"></textarea>
+      ${all.length ? '<div class="cw-note">직접 쓴 글엔 준비된 댓글이 달리지 않아요</div>' : ''}
+      <div class="who">작성자: ${esc(DATA.me)} (익명)</div>
+      <button class="btn submit" data-act="submit">등록하기</button>`;
+  const wc = all.map((w, i) => ({ w, i, ts: TONES.map(t => ({ t, v: wtv(w.tones && w.tones[t.id]) })).filter(x => x.v) }))
+                .filter(x => x.ts.length && !S.wUsed[x.i]);
+  if (!wc.length && !all.length) return `${topbar()}<div class="form">${freeForm}</div>${nav()}`;
+  const sel = wSel();
+  const list = (wc.length || DATA.allowFree) ? `<div class="cw-opts">
+      ${wc.map(({w, i, ts}) => `
+        <button class="cw-opt ${S.wPick===i?'on':''}" data-act="wpick" data-v="${i}">
+          <b>${esc(w.label || (i+1)+'번 글')} <span class="ar">${S.wPick===i?'▾':'▸'}</span></b>${w.summary ? `<span>${deco(w.summary)}</span>` : ''}</button>
+        ${S.wPick===i ? `<div class="cw-tones">${ts.map(({t, v}) =>
+          `<button class="cw-tone ${S.wTone===t.id?'on':''}" data-act="wtone" data-v="${esc(t.id)}"><em>${esc(t.name)}</em><span><b>${deco(v.title)}</b>${v.body ? `<small>${esc(plain(v.body).split('\n')[0])}</small>` : ''}</span></button>`).join('')}</div>` : ''}`).join('')}
+      ${DATA.allowFree ? `<button class="cw-opt ${S.wPick==='free'?'on':''}" data-act="wpick" data-v="free"><b>직접 쓰기 <span class="ar">${S.wPick==='free'?'▾':'▸'}</span></b><span>내 말로 자유롭게 쓰기</span></button>` : ''}
+    </div>` : '<div class="empty">더 쓸 수 있는 글이 없어요 🍎</div>';
+  const bottom = S.wPick === 'free' ? freeForm
+    : sel ? `<div class="w-prev"><span class="tag">${esc(boardName(sel.board))}</span><h3>${deco(sel.title)}</h3><div>${nl(sel.body)}</div></div>
+             <button class="btn submit" data-act="wsubmit">등록하기</button>`
+    : wc.length ? '<button class="btn submit" disabled>내용과 말투를 골라주세요</button>' : '';
+  return `${topbar()}<div class="form"><div class="w-guide">어떤 글을 쓸까요?</div>${list}${bottom}</div>${nav()}`;
+}
+
+function wSel(){
+  const w = DATA.writeChoices[S.wPick];
+  if (!w || !S.wTone || !w.tones) return null;
+  const v = wtv(w.tones[S.wTone]); if (!v) return null;
+  return { w, board: w.board || (DATA.boards[0] || {}).id, title: v.title, body: v.body || '' };
+}
+
+function notiView(){
+  const items = NOTI.length ? NOTI.map((n, i) => {
+    const p = DATA.posts.find(x => x.id === n.postId);
+    return `<button class="noti-item ${n.read?'':'new'}" data-act="noti" data-v="${i}">
+      <span class="noti-ic">${NOTI_IC[n.type] || '🔔'}</span>
+      <span class="noti-tx">
+        <span class="m">${esc(notiText(n))}</span>
+        ${p ? `<span class="p">${deco(p.title)}</span>` : ''}
+        <span class="tm">${esc(n.time)}</span>
+      </span>
+      ${n.read ? '' : '<span class="dot"></span>'}
+    </button>`;
+  }).join('') : '<div class="empty">알림이 없어요 🍎</div>';
+  return `${topbar()}<div class="noti-list">${items}</div>${nav()}`;
+}
+
+function render(){
+  const drafts = {}; ['cwText','lpText'].forEach(id => { const d = document.getElementById(id); if (d && d.value) drafts[id] = d.value; });
+  $app.innerHTML = S.view==='post' ? postView() : S.view==='write' ? writeView() : S.view==='noti' ? notiView() : listView();
+  Object.keys(drafts).forEach(id => { const d2 = document.getElementById(id); if (d2) d2.value = drafts[id]; });
+  window.scrollTo(0,0);
+  try { if (window.parent !== window) window.parent.postMessage({ sgState: {
+    view: S.view==='write' ? 'home' : S.view, tab:S.tab, board:S.board, postId:S.postId, from:S.from } }, '*'); } catch(e) {}
+}
+
+const resetCw = () => { S.cwOpen = null; S.cwPick = null; S.cwTone = null; };
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el || el.disabled) return;
+  const act = el.dataset.act, v = el.dataset.v;
+  if (act==='tab'){ S.tab=v; S.view='home'; S.board='all'; render(); }
+  else if (act==='board'){ S.board=v; render(); }
+  else if (act==='open'){ S.from='home'; resetCw(); S.postId=+v; S.view='post'; render(); liveStart(currentPost()); }
+  else if (act==='back'){ S.view=S.from; render(); }
+  else if (act==='write'){ S.from = S.view==='noti' ? 'noti' : 'home'; S.wPick=null; S.wTone=null; S.view='write'; render(); }
+  else if (act==='bell'){
+    S.tab='noti'; S.view='noti'; render();
+    const n = unread();
+    toast(n ? `새 알림이 ${n}건 있어요` : '모든 알림을 확인했어요');
+  }
+  else if (act==='noti'){
+    const n = NOTI[+v]; n.read = true;
+    if (DATA.posts.some(p => p.id === n.postId)) { S.from='noti'; resetCw(); S.postId=n.postId; S.view='post'; render(); liveStart(currentPost()); }
+    else render();
+  }
+  else if (act==='readall'){ NOTI.forEach(n => n.read = true); render(); toast('모든 알림을 확인했어요'); }
+  else if (act==='like'){
+    S.liked[S.postId] = !S.liked[S.postId]; keep(true);
+    if (S.liked[S.postId]) toast('왕왕!');
+  }
+  // ── 댓글 ──
+  else if (act==='cwtoggle'){ const o = S.cwOpen===S.postId; resetCw(); if (!o) S.cwOpen = S.postId; keep(true); }
+  else if (act==='pick'){ const nv = v==='free' ? 'free' : +v; S.cwPick = S.cwPick===nv ? null : nv; S.cwTone = null; keep(true); }
+  else if (act==='tone'){ S.cwTone = v; keep(true); }
+  else if (act==='cwsend'){
+    const p = currentPost(); let text, replies = null;
+    const sel = toneSel(p);
+    if (sel){ text = sel.text; replies = sel.replies.filter(hasText).map(r => ({ ...r, reply: r.reply!==false }));
+              if (isLive(p)) (p._used = p._used || {})[S.cwPick] = true;
+              else { p.chosen = S.cwPick; p.chosenAt = p.comments.length; } }
+    else {
+      const ta = document.getElementById('cwText'); text = ta ? ta.value.trim() : '';
+      if (!text){ toast('댓글을 입력해 주세요'); return; }
+    }
+    if (isLive(p)){ const ci = sel ? S.cwPick : null; resetCw(); lvBoxSend(p, text, replies, ci); toast('댓글이 등록됐어요'); return; }
+    p.comments.forEach(c => c.fresh = false);
+    p.comments.push({ nick:meOf(p), time:'방금', text, likes:0, fresh:true, mine:true });
+    resetCw(); keep(true); toast('댓글이 등록됐어요');
+    p.comments.forEach(c => c.fresh = false);
+    if (replies && replies.length) playSeq(p, replies, () => {
+      const r = replies.find(x => x.nick !== meOf(p));
+      if (r) NOTI.unshift({ type:'reply', postId:p.id, time:'방금', read:false, text:`${r.nick}님이 답글을 달았어요` });
+    });
+  }
+  else if (act==='lpPick'){ const nv = v==='free' ? 'free' : +v; S.lpPick = S.lpPick===nv ? null : nv; S.lpTone = null; keep(true); }
+  else if (act==='lpTone'){ S.lpTone = v; keep(true); }
+  else if (act==='lpSend'){
+    const p = currentPost(), w = p && p._wait, sel = p && lvSel(p); if (!w || !sel) return;
+    let text, replies = [];
+    if (sel === 'free'){ const ta = document.getElementById('lpText'); text = ta ? ta.value.trim() : ''; if (!text){ toast('댓글을 입력해 주세요'); return; } }
+    else { text = sel.text; replies = sel.replies; }
+    p._feed.push({ k:'cmt', nick: meOf(p), text, mine: true, fresh: true, snap: { feedLen: p._feed.length, si: w.si, pick: true } });
+    p._wait = null; S.lpPick = null; S.lpTone = null;
+    p._q = lvReplies(p, replies);
+    liveRender(p, true); lvRun(p);
+  }
+  else if (act==='lvRepick'){
+    const p = currentPost(), it = p && p._feed && p._feed[+v]; if (!it || !it.snap) return;
+    clearTimeout(p._lt); delete S.typing[p.id];
+    const sn = it.snap;
+    p._feed.slice(sn.feedLen).forEach(f => { if (f.snap && f.snap.ci != null && p._used) p._used[f.snap.ci] = false; });
+    p._feed.length = sn.feedLen; p._q = []; p._done = false; p._run = false;
+    if (sn.pick){ p._si = sn.si + 1; p._wait = { options: p._script[sn.si].options, si: sn.si }; S.lpPick = null; S.lpTone = null; liveRender(p, true); }
+    else { p._si = sn.si; p._wait = sn.wait || null; resetCw(); S.cwOpen = p.id; keep(true); if (!p._wait) lvRun(p); }
+  }
+  else if (act==='repick'){
+    const p = currentPost(); clearTimeout(p._timer); delete S.typing[p.id];
+    p.comments.length = p.chosenAt; p.chosen = null;
+    resetCw(); S.cwOpen = p.id; keep(true);
+  }
+  // ── 글쓰기 ──
+  else if (act==='wpick'){ const nv = v==='free' ? 'free' : +v; S.wPick = S.wPick===nv ? null : nv; S.wTone = null; keep(true); }
+  else if (act==='wtone'){ S.wTone = v; keep(true); }
+  else if (act==='wsubmit'){
+    const sel = wSel(); if (!sel) return;
+    const id = nextId();
+    const wn = sel.w.nick || DATA.me;
+    const p = { id, fromW: S.wPick, board: sel.board, nick: wn, me: wn, time:'방금', views: +sel.w.views || 1, likes: +sel.w.likes || 0, title: sel.title, body: sel.body,
+                comments: [], choices: JSON.parse(JSON.stringify(sel.w.choices || [])) };
+    DATA.posts.unshift(p); S.wUsed[S.wPick] = true;
+    S.from='home'; resetCw(); S.postId=id; S.view='post'; render(); toast('글이 등록됐어요');
+    const ac = (sel.w.autoComments || []).filter(hasText).map(c => ({ ...c, reply: !!c.reply }));
+    if (ac.length) playSeq(p, ac, () => {
+      NOTI.unshift({ type:'comment', postId:id, time:'방금', read:false, text:`내 글에 댓글이 ${ac.length}개 달렸어요` });
+    });
+  }
+  else if (act==='wRepick'){   // 글쓰기 선택지로 쓴 글 되돌리기 → 다시 고르기
+    const p = currentPost(); if (!p || p.fromW == null) return;
+    clearTimeout(p._timer); delete S.typing[p.id];
+    DATA.posts.splice(DATA.posts.indexOf(p), 1);
+    for (let k = NOTI.length - 1; k >= 0; k--) if (NOTI[k].postId === p.id) NOTI.splice(k, 1);
+    S.wUsed[p.fromW] = false; resetCw();
+    S.wPick = null; S.wTone = null; S.from = 'home'; S.view = 'write'; render(); toast('다른 글을 골라 보세요');
+  }
+  else if (act==='submit'){
+    const title = document.getElementById('wTitle').value.trim();
+    const body = document.getElementById('wBody').value.trim();
+    if (!title || !body){ toast('제목과 내용을 입력해 주세요'); return; }
+    const id = nextId();
+    DATA.posts.unshift({ id, board: document.getElementById('wBoard').value, nick: DATA.me, time:'방금', views:0, likes:0, title, body, comments:[], choices:[] });
+    S.from='home'; resetCw(); S.postId = id; S.view='post'; render(); toast('글이 등록됐어요');
+  }
+});
+
+render();
+if (S.view === 'post' && currentPost()) liveStart(currentPost());
+</script>
+</body>
+</html>
 
